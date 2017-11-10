@@ -1,0 +1,23 @@
+{
+  "name": "Logikos/Util",
+  "homepage": "https://github.com/logikostech/util",
+  "description": "Utility Classes",
+  "type": "library",
+  "license": "MIT",
+  "authors": [{
+    "name": "Todd Empcke",
+    "email": "tempcke@logikostech.net"
+  }],
+  "require": {
+    "php": ">=7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Logikos\\Util\\": "src/",
+      "Logikos\\Util\\Tests\\": "tests/"
+    }
+  }
+}
