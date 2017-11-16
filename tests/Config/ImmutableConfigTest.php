@@ -38,6 +38,15 @@ class ImmutableConfigTest extends TestCase {
     $conf->__construct(['b' => 'bar']);
   }
 
+  public function testCanNotSet() {
+    $conf = new Config(['a' => 'foo']);
+    if (method_exists($conf, 'set')) {
+      $this->expectException(CanNotMutateException::class);
+      $conf->set('b', 'bar');
+    }
+    else assertFalse(method_exists($conf, 'set'));
+  }
+
 
   # Unset
   public function testCanNotUnsetPropertyAccess() {
@@ -71,7 +80,10 @@ class ImmutableConfigTest extends TestCase {
 
   public function testCanNotMerge() {
     $conf = new Config(['a' => 'foo']);
-    $this->assertFalse(method_exists($conf, 'merge'));
+    if (method_exists($conf, 'merge')) {
+      $this->expectException(CanNotMutateException::class);
+      $conf->merge();
+    }
+    else $this->assertFalse(method_exists($conf, 'merge'));
   }
-
 }
