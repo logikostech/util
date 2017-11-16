@@ -2,3 +2,4 @@ composer.phar
 /.idea/
 /cache/
 /vendor/
+/tests/logs/

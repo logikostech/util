@@ -137,12 +137,12 @@ class ConfigTest  extends TestCase {
 
   # Path
   public function testGetByPathReturnsNullWhenNotSet() {
-    $conf = $this->getConfig([]);
+    $conf = $this->getConfig();
     $this->assertNull($conf->path('name'));
   }
 
   public function testGetByPathWithDefaultWhenNotSet() {
-    $conf = $this->getConfig([]);
+    $conf = $this->getConfig();
     $this->assertEquals(50, $conf->path('age', 50));
   }
 

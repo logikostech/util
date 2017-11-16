@@ -44,11 +44,10 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
 
   public function path($path, $default = null, $delimiter = '.') {
     $tokens = explode($delimiter, $path);
-    if ($token = array_shift($tokens)) {
-      if ($this->get($token) instanceof self)
-        return $this[$token]->path(implode('.', $tokens), $default);
-      return $this->get($token, $default);
-    }
+    $token  = array_shift($tokens);
+    if ($this->get($token) instanceof self)
+      return $this[$token]->path(implode('.', $tokens), $default);
+    return $this->get($token, $default);
   }
 
 

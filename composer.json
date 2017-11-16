@@ -19,5 +19,8 @@
       "Logikos\\Util\\": "src/",
       "Logikos\\Util\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit"
   }
 }
