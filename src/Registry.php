@@ -30,7 +30,7 @@ namespace Logikos\Util;
  *  unset($registry['something']);
  *</code>
  */
-abstract class Registry implements \ArrayAccess, \Countable, \Iterator {
+class Registry implements \ArrayAccess, \Countable, \Iterator {
   protected $_data;
 
   /**
