@@ -1,4 +1,5 @@
 [![Travis CI](https://img.shields.io/travis/logikostech/util/master.svg)](https://travis-ci.org/logikostech/util)
+[![Coverage Status](https://coveralls.io/repos/github/logikostech/util/badge.svg?branch=master)](https://coveralls.io/github/logikostech/util?branch=master)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg)](https://php.net/)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/logikostech/class-options/master/LICENSE)
 
@@ -27,7 +28,7 @@ composer.phar require logikos/util
 ### GitHub
 Just clone the repository in a common location or inside your project:
 ```bash
-    git clone https://github.com/logikostech/util.git
+git clone https://github.com/logikostech/util.git
 ```
 
 ## Documentation
