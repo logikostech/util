@@ -244,10 +244,6 @@ class ConfigTest  extends TestCase {
    * @return Config|\PHPUnit_Framework_MockObject_MockObject
    */
   private function getConfig(array $data = []) {
-    // php <  7.0
-    return $this->getMockForAbstractClass(Config::class, [$data]);
-
-    // php >= 7.0
-    // return new class($data) extends Config {}; // php >= 7.0
+    return new class($data) extends Config {}; // php >= 7.0
   }
 }
