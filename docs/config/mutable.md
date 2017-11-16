@@ -1,13 +1,19 @@
-# Logikos\Util\Config\MutableConfig
+# Config\MutableConfig
+
+Mutable Config works the same as the [Abstract Config] with some additional methods, it adds `set($key, $value)` and `merge(Config $config)`
+
 - Derivative of [Abstract Config]
 - [MutableConfig Source][MutableConfig]
+- [General Usage](#general-usage)
+  - [Merge](#merge)
 - [Differences from Phalcon\Config](#phalcon-config)
-- [Examples](#examples)
 
-
-## Examples
+## General Usage
+Most of this is the same as the [Abstract Config Example]
 ```php
-    $config = new \Logikos\Util\Config\MutableConfig([
+    use Logikos\Util\Config\MutableConfig as Config;
+    
+    $config = new Config([
         "env"      => "production",
         "database" => [
             "adapter"  => "Mysql",
@@ -19,9 +25,9 @@
     $config->toArray();
     
     # Set value
-    $config->env = 'development';
+    $config->env   = 'development';
     $config['env'] = 'development';
-    $config->set('env', 'development');
+    $config->set('env', 'development');      // added method
     $config->offsetSet('env', 'development');
     
     # Set nested values
@@ -59,14 +65,25 @@
     unset($config->something);
     unset($config['something']);
     $config->offsetUnset('something');
+```
+
+### Merge
+```php
+    use Logikos\Util\Config\MutableConfig as Config;
     
-    # Merge
-    $config->merge(new \Logikos\Util\Config\MutableConfig([
+    $config = new Config([
+        "env"      => "production",
         "database" => [
-            "host" => "192.168.0.203",
-            "port" => 3307
+            "adapter"  => "Mysql",
+            "host"     => "localhost"
+        ]
+    ]);
+    $config->merge(new Config([
+        "database" => [
+            "host"     => "192.168.0.203",
+            "port"     => 3307
         ],
-        "foo" => "bar"
+        "foo"      => "bar"
     ]));
     $config->env;               // production
     $config->database->adapter; // mysql
@@ -91,12 +108,15 @@ In [Phalcon\Config] it allows php to trigger whatever normal errors would occure
 ### Better numeric indexing on merge
 Because of `merge()` we must deal with numeric indexes.  The difference can best be seen in these 2 unit tests. Notice in Util\Config the index for Jane is 1, vs 2 in the Phalcon\Config version.
 ```php
+    use Logikos\Util\Config\MutableConfig;
+    use Phalcon\Config as PhalconConfig;
+    
     public function testMergeWithSomeNumericIndexes() {
-        $a = new \Logikos\Util\Config\MutableConfig([
+        $a = new MutableConfig([
             0     => 'John',
             'age' => 50
         ]);
-        $b = new \Logikos\Util\Config\MutableConfig([
+        $b = new MutableConfig([
             0     => 'Jane',
             'age' => 40
         ]);
@@ -113,11 +133,11 @@ Because of `merge()` we must deal with numeric indexes.  The difference can best
     }
 
     public function testPhalconMergeWithSomeNumericIndexes() {
-        $a = new \Phalcon\Config([
+        $a = new PhalconConfig([
             0     => 'John',
             'age' => 50
         ]);
-        $b = new \Phalcon\Config([
+        $b = new PhalconConfig([
             0     => 'Jane',
             'age' => 40
         ]);
@@ -139,3 +159,4 @@ Because of `merge()` we must deal with numeric indexes.  The difference can best
 [ImmutableConfig]: ../../src/Config/ImmutableConfig.php
 [Phalcon\Config]: https://docs.phalconphp.com/en/3.2/Phalcon_Config
 [Abstract Config]: README.md
+[Abstract Config Example]: README.md#examples

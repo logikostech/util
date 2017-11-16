@@ -1,4 +1,4 @@
-# Logikos\Util\Config
+# Config
 Abstract [Config] is a partial port of [Phalcon\Config] and serves as a base class for [MutableConfig] and [ImmutableConfig] though you could derive your own classes from it also.
 
 The primary purpose of this class is to convert an array into a configuration object.  Each nested array also becomes a config object.
@@ -14,9 +14,7 @@ The primary purpose of this class is to convert an array into a configuration ob
         "env"      => "production",
         "database" => [
             "adapter"  => "Mysql",
-            "host"     => "localhost",
-            "username" => "scott",
-            "password" => "cheetah"
+            "host"     => "localhost"
         ]
     ]);
     

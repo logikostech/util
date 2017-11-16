@@ -1,14 +1,19 @@
-# Logikos\Util\Config\ImmutableConfig
-- Derivative of [Abstract Config]
-- [ImmutableConfig Source][ImmutableConfig]
-- Immutable (obviously)
-- [General Usage](#general-usage)
-- [`with` Method](#with)
+# Config\ImmutableConfig
 
 Immutable Config works the same as the [Abstract Config] except any attempt to mutate results in a thrown `CanNotMutateException` and it adds a `with($key, $value)` [method](#with).
 
+- Derivative of [Abstract Config]
+- [ImmutableConfig Source][ImmutableConfig]
+- [General Usage](#general-usage)
+  - [Not Mutable](#not-mutable)
+  - [Added with() Method](#with)
+
 ## General Usage
 ```php
+    use Logikos\Util\CanNotMutateException;
+    use Logikos\Util\Config\ImmutableConfig;
+    use OutOfBoundsException;
+    
     $config = new ImmutableConfig([
         "env"      => "production",
         "database" => [
@@ -19,11 +24,6 @@ Immutable Config works the same as the [Abstract Config] except any attempt to m
     
     # export as array
     $config->toArray();
-    
-    # Set value
-    $config->foo   = 'bar';                  // throws \Logikos\Util\CanNotMutateException
-    $config['foo'] = 'bar';                  // throws \Logikos\Util\CanNotMutateException
-    $config->offsetSet('foo', 'bar');        // throws \Logikos\Util\CanNotMutateException
     
     # Get value
     $value = $config->env;
@@ -50,11 +50,23 @@ Immutable Config works the same as the [Abstract Config] except any attempt to m
     $exists = $config->offsetExists('something');
 ```
 
-## With
+### Not Mutable
+```php
+    # Set value
+    $config->foo   = 'bar';                  // throws CanNotMutateException
+    $config['foo'] = 'bar';                  // throws CanNotMutateException
+    $config->offsetSet('foo', 'bar');        // throws CanNotMutateException
+    
+    # Unset
+    unset($config->something);               // throws CanNotMutateException
+    unset($config['something']);             // throws CanNotMutateException
+    $config->offsetUnset('something');       // throws CanNotMutateException
+```
+
+### With
 ```php
     use Logikos\Util\Config\ImmutableConfig;
     
-    # With
     $conf1 = new ImmutableConfig(["name" => "John"]);
     $conf2 = $conf1->with('age', 40);
     
