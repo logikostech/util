@@ -1,7 +1,7 @@
 {
   "name": "Logikos/Util",
   "homepage": "https://github.com/logikostech/util",
-  "description": "Utility Classes",
+  "description": "Utility Classes, including a config simmilar to Phalcon\\Config, MutableConfig and ImmutableConfig",
   "type": "library",
   "license": "MIT",
   "authors": [{
