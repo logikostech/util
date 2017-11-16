@@ -195,9 +195,12 @@ class ConfigTest  extends TestCase {
     $this->assertEquals(count($data), $i);
   }
 
-
   # helpers
   private function getConfig(array $data = []) {
-    return new class($data) extends Config {};
+    // php <  7.0
+    return $this->getMockForAbstractClass(Config::class, [$data]);
+
+    // php >= 7.0
+    // return new class($data) extends Config {}; // php >= 7.0
   }
 }
