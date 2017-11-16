@@ -5,9 +5,14 @@
 # Logikos\Util
 Utility classes
 
+- [Installation](#installation)
+  - [Composer](#composer)
+  - [Composer](#github)
+- [Documentation](#documentation)
+
 ## Installation
 
-### Installing via Composer
+### Composer
 
 Install Composer in a common location or in your project:
 
@@ -18,38 +23,42 @@ curl -s http://getcomposer.org/installer | php
 create or edit the `composer.json` file as follows:
 
 ```json
-{
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/logikostech/util"
+    {
+        "repositories": [
+            {
+                "type": "git",
+                "url": "https://github.com/logikostech/util"
+            }
+        ],
+        "require": {
+            "logikostech/uril": "dev-master"
         }
-    ],
-    "require": {
-        "logikostech/uril": "dev-master"
     }
-}
 ```
 
 Run the composer installer:
 
 ```bash
-$ php composer.phar install
+    $ php composer.phar install
 ```
 
-### Installing via GitHub
+### GitHub
 
 Just clone the repository in a common location or inside your project:
 
 ```bash
-git clone https://github.com/logikostech/util.git
+    git clone https://github.com/logikostech/util.git
 ```
 
-## Highlights
-
-### [Logikos\Util\Config](src/Config.php)
-Largely inspired by [Phalcon\Config](https://docs.phalconphp.com/hr/3.2/api/Phalcon_Config), it converts an array into a config object.  Each nested array also becomes a config object.
-
-#### [Mutable](src/Config/MutableConfig.php) 
-
-#### [Immutable](src/Config/ImmutableConfig.php) Examples
+## Documentation
+- [Abstract Config] - base config object largely inspired by Phalcon\Config
+  - [Mutable Config] - adds `set($key, $value)` and `merge(Config $config)`
+  - [Immutable Config] - adds `with($key, $value)` and throws `OutOfBoundsException` on assignment after construction
+  
+[Config]: src/Config.php
+[MutableConfig]: src/Config/MutableConfig.php
+[ImmutableConfig]: src/Config/ImmutableConfig.php
+[Phalcon\Config]: https://docs.phalconphp.com/en/3.2/Phalcon_Config
+[Abstract Config]: docs/config/README.md
+[Mutable Config]: docs/config/mutable.md
+[Immutable Config]: docs/config/immutable.md

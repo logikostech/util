@@ -16,12 +16,13 @@ It does have an extra with method though.
     $conf2->toArray(); // ['name'=>'John', 'age'=>40]
     
     # Set
-    $conf1->set('foo', 'bar'); // FATAL ERROR: Call to undefined method Config::set()
-    $conf1->foo   = 'bar';     // throws \Logikos\Util\CanNotMutateException
-    $conf1['foo'] = 'bar';     // throws \Logikos\Util\CanNotMutateException
+    $conf1->set('foo', 'bar');       // FATAL ERROR: Call to undefined method Config::set()
+    $conf1->foo   = 'bar';           // throws \Logikos\Util\CanNotMutateException
+    $conf1['foo'] = 'bar';           // throws \Logikos\Util\CanNotMutateException
+    $conf1->offsetSet('foo', 'bar'); // throws \Logikos\Util\CanNotMutateException
     
     # Merge
-    $conf1->merge([]);         // FATAL ERROR: Call to undefined method Config::set()
+    $conf1->merge([]);               // FATAL ERROR: Call to undefined method Config::set()
 ```
 
 [Config]: ../../src/Config.php
