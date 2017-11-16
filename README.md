@@ -1,4 +1,7 @@
 [![Travis CI](https://img.shields.io/travis/logikostech/util/master.svg)](https://travis-ci.org/logikostech/util)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/logikostech/util/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/logikostech/util/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/logikostech/util/badges/build.png?b=master)](https://scrutinizer-ci.com/g/logikostech/util/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/logikostech/util/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/logikostech/util/?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/logikostech/util/badge.svg?branch=master)](https://coveralls.io/github/logikostech/util?branch=master)
 [![CodeCov](https://codecov.io/gh/logikostech/util/branch/master/graph/badge.svg)](https://codecov.io/gh/logikostech/util)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg)](https://php.net/)
