@@ -12,12 +12,6 @@ php:
   - 7.2
   - hhvm
 
-# Tell Travis CI to monitor only 'master' branch
-branches:
-  only:
-  - master
-  - 1.0
-
 matrix:
   allow_failures:
     - php: hhvm
