@@ -1,28 +1,65 @@
-# [Logikos\Util\Config\MutableConfig][MutableConfig]
+# Logikos\Util\Config\ImmutableConfig
 - Derivative of [Abstract Config]
+- [ImmutableConfig Source][ImmutableConfig]
 - Immutable (obviously)
+- [General Usage](#general-usage)
+- [`with` Method](#with)
 
-Immutable Config works the same way except trying to set or merge results in a thrown `CanNotMutateException`
+Immutable Config works the same as the [Abstract Config] except any attempt to mutate results in a thrown `CanNotMutateException` and it adds a `with($key, $value)` [method](#with).
 
-It does have an extra with method though.
+## General Usage
 ```php
-    # With
-    $conf1 = new \Logikos\Util\Config\ImmutableConfig([
-        "name" => "John"
+    $config = new ImmutableConfig([
+        "env"      => "production",
+        "database" => [
+            "adapter"  => "Mysql",
+            "host"     => "localhost"
+        ]
     ]);
+    
+    # export as array
+    $config->toArray();
+    
+    # Set value
+    $config->foo   = 'bar';                  // throws \Logikos\Util\CanNotMutateException
+    $config['foo'] = 'bar';                  // throws \Logikos\Util\CanNotMutateException
+    $config->offsetSet('foo', 'bar');        // throws \Logikos\Util\CanNotMutateException
+    
+    # Get value
+    $value = $config->env;
+    $value = $config['env'];
+    $value = $config->get('env');
+    $value = $config->offsetGet('env');
+    
+    # Get nested values
+    $value = $config->database->host;
+    $value = $config['database']['host'];
+    $value = $config->get('database')->get('host');
+    $value = $config->offsetGet('database')->offsetGet('host');
+    
+    # Get value that does not exist
+    $value = $config->foo;                   // throws OutOfBoundsException
+    $value = $config['foo'];                 // throws OutOfBoundsException
+    $value = $config->get('foo');            // null
+    $value = $config->get('foo', 'default'); // 'default'
+    
+    # Check if the key exists
+    $exists = $config->has('something');
+    $exists = isset($config->something);
+    $exists = isset($config['something']);
+    $exists = $config->offsetExists('something');
+```
+
+## With
+```php
+    use Logikos\Util\Config\ImmutableConfig;
+    
+    # With
+    $conf1 = new ImmutableConfig(["name" => "John"]);
     $conf2 = $conf1->with('age', 40);
     
-    $conf1->toArray(); // ['name'=>'John']
-    $conf2->toArray(); // ['name'=>'John', 'age'=>40]
-    
-    # Set
-    $conf1->set('foo', 'bar');       // FATAL ERROR: Call to undefined method Config::set()
-    $conf1->foo   = 'bar';           // throws \Logikos\Util\CanNotMutateException
-    $conf1['foo'] = 'bar';           // throws \Logikos\Util\CanNotMutateException
-    $conf1->offsetSet('foo', 'bar'); // throws \Logikos\Util\CanNotMutateException
-    
-    # Merge
-    $conf1->merge([]);               // FATAL ERROR: Call to undefined method Config::set()
+    $conf1->toArray();                       // ['name'=>'John']
+    $conf2->toArray();                       // ['name'=>'John', 'age'=>40]
 ```
 
 [Config]: ../../src/Config.php

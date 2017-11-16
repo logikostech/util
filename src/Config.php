@@ -5,44 +5,7 @@ namespace Logikos\Util;
 /**
  * This is largely inspired by \Phalcon\Config - https://docs.phalconphp.com/hr/3.2/api/Phalcon_Config
  * NOTICE: \Phalcon\Config will be much faster than this class and you are encouraged to use it
- *
- *<code>
- * $config = new \Logikos\Util\Config([
- *     "database" => [
- *         "adapter"  => "Mysql",
- *         "host"     => "localhost",
- *         "username" => "scott",
- *         "password" => "cheetah"
- *     ]
- * ]);
- *
- * // export as array
- * $config->toArray();
- *
- * // Set/alter value
- * $config->database->dbname     = 'something';
- * // or
- * $config['database']['dbname'] = 'something';
- *
- * // Get value
- * $value = $config->database->host;
- * // or
- * $value = $config['database']['host'];
- * // or
- * $value = $config->get('database')->get('host');
- *
- * // Check if the key exists
- * $exists = isset($config->something);
- * // or
- * $exists = isset($config['something']);
- * // or
- * $exists = $config->has('something');
- *
- * // Unset
- * unset($config->something);
- * // or
- * unset($config['something']);
- *</code>
+ * @see ../docs/config/README.md
  */
 abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   private $locked   = false;

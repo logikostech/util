@@ -7,7 +7,7 @@ Utility classes
 
 - [Installation](#installation)
   - [Composer](#composer)
-  - [Composer](#github)
+  - [Github](#github)
 - [Documentation](#documentation)
 
 ## Installation

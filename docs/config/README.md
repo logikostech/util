@@ -11,6 +11,7 @@ The primary purpose of this class is to convert an array into a configuration ob
 ## Examples
 ```php
     $config = new class() extends \Logikos\Util\Config([
+        "env"      => "production",
         "database" => [
             "adapter"  => "Mysql",
             "host"     => "localhost",
@@ -22,46 +23,45 @@ The primary purpose of this class is to convert an array into a configuration ob
     # export as array
     $config->toArray();
     
-    # Set/alter value
+    # Set value
+    $config->env = 'development';
+    $config['env'] = 'development';
+    $config->offsetSet('env', 'development');
+    
+    # Set nested values
     $config->database->dbname     = 'something';
     $config['database']['dbname'] = 'something';
-    $config->offsetSet('env', 'Development');
+    $config->database->offsetSet('dbname', 'something');
+    $config->get('database')->offsetSet('dbname', 'something');
     
     # Get value
+    $value = $config->env;
+    $value = $config['env'];
+    $value = $config->get('env');
+    $value = $config->offsetGet('env');
+    
+    # Get nested values
     $value = $config->database->host;
     $value = $config['database']['host'];
     $value = $config->get('database')->get('host');
     $value = $config->offsetGet('database')->offsetGet('host');
     
     # Get value that does not exist
-    $value = $config->get('foo');            // null
-    $value = $config->get('foo', 'default'); // 'default'
     $value = $config->foo;                   // throws OutOfBoundsException
     $value = $config['foo'];                 // throws OutOfBoundsException
+    $value = $config->get('foo');            // null
+    $value = $config->get('foo', 'default'); // 'default'
     
     # Check if the key exists
+    $exists = $config->has('something');
     $exists = isset($config->something);
     $exists = isset($config['something']);
-    $exists = $config->has('something');
     $exists = $config->offsetExists('something');
     
     # Unset
     unset($config->something);
     unset($config['something']);
     $config->offsetUnset('something');
-    
-    # Merge
-    $config->merge(new MutableConfig([
-        "database" => [
-            "host" => "192.168.0.203",
-            "port" => 3307
-        ],
-        "foo" => "bar"
-    ]));
-    $config->database->adapter; // mysql
-    $config->database->host;    // 192.168.0.203
-    $config->database->port;    // 3307
-    $config->foo;               // bar
 ```
 
 [Config]: ../../src/Config.php
