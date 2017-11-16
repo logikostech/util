@@ -14,7 +14,7 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="./tests/logs/coverage" charset="UTF-8" yui="true" highlight="false" lowUpperBound="35" highLowerBound="70" />
-        <log type="testdox-html" target="./tests/logs/testdox.html" />
+        <log type="coverage-html" target="./build/logs/coverage" charset="UTF-8" yui="true" highlight="false" lowUpperBound="35" highLowerBound="70" />
+        <log type="testdox-html" target="./build/logs/testdox.html" />
     </logging>
 </phpunit>
