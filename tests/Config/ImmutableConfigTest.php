@@ -2,8 +2,8 @@
 
 namespace Logikos\Util\Tests\Config;
 
+use Logikos\Util\CanNotMutateException;
 use Logikos\Util\Config as AbstractConfig;
-use Logikos\Util\Config\CanNotMutateException;
 use Logikos\Util\Config\ImmutableConfig as Config;
 
 class ImmutableConfigTest extends TestCase {

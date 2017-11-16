@@ -157,6 +157,6 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
 
   private function blockIfLocked() {
     if ($this->isLocked())
-      throw new Config\CanNotMutateException();
+      throw new CanNotMutateException();
   }
 }
