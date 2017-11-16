@@ -116,7 +116,42 @@ class ConfigTest  extends TestCase {
     $this->expectException(\OutOfBoundsException::class);
     $conf->b;
   }
+  
 
+  # Set
+  public function testSetAsArray() {
+    $conf = $this->getConfig(['a' => 'foo']);
+    $conf['b'] = 'bar';
+    $this->assertEquals('bar', $conf['b']);
+  }
+
+  public function testSetAsProperty() {
+    $conf = $this->getConfig(['a' => 'foo']);
+    $conf->b = 'bar';
+    $this->assertEquals('bar', $conf->b);
+  }
+
+  public function testAssignmentOfArrayIsConfigObject() {
+    $conf = $this->getConfig();
+    $conf->john      = ['name' => 'John', 'age' => 50];
+    $conf['jane']    = ['name' => 'Jane', 'age' => 40];
+    $this->assertTrue($conf['john'] instanceof Config);
+    $this->assertTrue($conf['jane'] instanceof Config);
+  }
+
+
+  # Unset
+  public function testCanNotUnsetPropertyAccess() {
+    $conf = $this->getConfig(['a' => 'foo']);
+    unset($conf->a);
+    $this->assertFalse($conf->offsetExists('a'));
+  }
+
+  public function testCanNotUnsetArrayAccess() {
+    $conf = $this->getConfig(['a' => 'foo']);
+    unset($conf['a']);
+    $this->assertFalse($conf->offsetExists('a'));
+  }
 
   # ToArray
   public function testToArray() {
@@ -193,6 +228,13 @@ class ConfigTest  extends TestCase {
       $i++;
     }
     $this->assertEquals(count($data), $i);
+  }
+  
+  # Lockable
+  public function testIsLockable() {
+    $conf = $this->getConfig(['a' => 'foo']);
+    $conf->lock();
+    $this->assertTrue($conf->isLocked());
   }
 
   # helpers

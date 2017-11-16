@@ -22,42 +22,14 @@ class MutableConfigTest extends TestCase {
   public function testSet() {
     $conf = new Config(['a' => 'foo']);
     $conf->set('b', 'bar');
+    $conf->set('jake', ['name' => 'Jake', 'age' => 30]);
     $this->assertEquals('bar', $conf->offsetGet('b'));
   }
-  public function testSetAsArray() {
-    $conf = new Config(['a' => 'foo']);
-    $conf['b'] = 'bar';
-    $this->assertEquals('bar', $conf['b']);
-  }
 
-  public function testSetAsProperty() {
-    $conf = new Config(['a' => 'foo']);
-    $conf->b = 'bar';
-    $this->assertEquals('bar', $conf->b);
-  }
-
-  public function testAssignmentOfArrayIsConfigObject() {
+  public function testAssignmentWithSetOfArrayIsConfigObject() {
     $conf = new Config();
-    $conf->john      = ['name' => 'John', 'age' => 50];
-    $conf['jane']    = ['name' => 'Jane', 'age' => 40];
     $conf->set('jake', ['name' => 'Jake', 'age' => 30]);
-    $this->assertTrue($conf['john'] instanceof Config);
-    $this->assertTrue($conf['jane'] instanceof Config);
     $this->assertTrue($conf['jake'] instanceof Config);
-  }
-
-
-  # Unset
-  public function testCanNotUnsetPropertyAccess() {
-    $conf = new Config(['a' => 'foo']);
-    unset($conf->a);
-    $this->assertFalse($conf->offsetExists('a'));
-  }
-
-  public function testCanNotUnsetArrayAccess() {
-    $conf = new Config(['a' => 'foo']);
-    unset($conf['a']);
-    $this->assertFalse($conf->offsetExists('a'));
   }
 
 

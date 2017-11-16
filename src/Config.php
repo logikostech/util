@@ -103,9 +103,7 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
     return new static($data);
   }
 
-
-  # For Internal Use
-  protected function lock() {
+  public function lock() {
     $this->locked = true;
   }
 
