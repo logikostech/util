@@ -39,7 +39,9 @@ before_script:
   - mkdir -p build/logs
   - ls -al
 
-script: phpunit --coverage-clover build/logs/clover.xml
+script:
+  - phpunit --coverage-clover build/logs/clover.xml
+  - composer phpstan
 
 
 after_success:

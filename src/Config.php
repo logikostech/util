@@ -14,9 +14,12 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   public function __construct(array $arrayConfig = []) {
     foreach($arrayConfig as $key => $value)
       $this->offsetSet($key, $value);
-    if (method_exists($this, 'onConstruct'))
-      $this->onConstruct();
+
+    $this->onConstruct();
   }
+
+  // override this if you want to
+  protected function onConstruct() {}
 
   public function isLocked() {
     return $this->locked;
