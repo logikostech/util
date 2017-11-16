@@ -7,16 +7,16 @@ php:
   - 7.2
   - hhvm
 
-cache:
-  directories:
-    - vendor
-    - ~/.composer/cache
-
 before_install:
   - composer install --prefer-source --no-interaction --ignore-platform-reqs
 
-script:
-  - vendor/bin/phpunit tests/
+matrix:
+    allow_failures:
+        - php: hhvm
 
-notifications:
-email: false
+before_script:
+    - travis_retry composer self-update
+    - travis_retry composer --prefer-source --dev install
+
+script:
+- phpunit --coverage-text tests
