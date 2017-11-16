@@ -44,7 +44,7 @@ class ImmutableConfigTest extends TestCase {
       $this->expectException(CanNotMutateException::class);
       $conf->set('b', 'bar');
     }
-    else assertFalse(method_exists($conf, 'set'));
+    else $this->assertFalse(method_exists($conf, 'set'));
   }
 
 
