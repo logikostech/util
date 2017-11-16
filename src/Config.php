@@ -133,7 +133,11 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   public function __get($offset)         { return $this->offsetGet($offset);    }
   public function __isset($offset)       { return $this->offsetExists($offset); }
 
-  public static function __set_state(array $data) : Config {
+  /**
+   * @param array $data
+   * @return static
+   */
+  public static function __set_state(array $data) {
     return new static($data);
   }
 
