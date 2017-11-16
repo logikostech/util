@@ -46,11 +46,13 @@ git clone https://github.com/logikostech/util.git
 ```
 
 ## Highlights
-### [Logikos\Util\Config](src/config.php)
+
+### [Logikos\Util\Config](src/Config.php)
 Largely inspired by [Phalcon\Config](https://docs.phalconphp.com/hr/3.2/api/Phalcon_Config), it converts an array into a config object.  Each nested array also becomes a config object.
-#### Examples
+
+#### [Mutable](src/Config/MutableConfig.php) Examples
 ```php
-$config = new \Logikos\Util\Config([
+$config = new \Logikos\Util\Config\MutableConfig([
     "database" => [
         "adapter"  => "Mysql",
         "host"     => "localhost",
@@ -64,27 +66,32 @@ $config->toArray();
 
 # Set/alter value
 $config->database->dbname     = 'something';
-// or
 $config['database']['dbname'] = 'something';
+$config->set('env', 'Development');
+$config->offsetSet('env', 'Development');
 
 # Get value
 $value = $config->database->host;
-// or
 $value = $config['database']['host'];
-// or
 $value = $config->get('database')->get('host');
+$value = $config->offsetGet('database')->offsetGet('host');
+
+# Get value that does not exist
+$value = $config->get('foo');            // null
+$value = $config->get('foo', 'default'); // 'default'
+$value = $config->foo;                   // throws OutOfBoundsException
+$value = $config['foo'];                 // throws OutOfBoundsException
 
 # Check if the key exists
 $exists = isset($config->something);
-// or
 $exists = isset($config['something']);
-// or
 $exists = $config->has('something');
+$exists = $config->offsetExists('something');
 
 # Unset
 unset($config->something);
-// or
 unset($config['something']);
+$config->offsetUnset('something');
 
 # Merge
 $config->merge(new Config([
@@ -98,4 +105,27 @@ $config->database->adapter; // mysql
 $config->database->host;    // 192.168.0.203
 $config->database->port;    // 3307
 $config->foo;               // bar
+```
+
+#### [Immutable](src/Config/ImmutableConfig.php) Examples
+Immutable Config works the same way except trying to set or merge results in a thrown `CanNotMutateException`
+
+It does have an extra with method though.
+```php
+# With
+$conf1 = new \Logikos\Util\Config\ImmutableConfig([
+    "name" => "John"
+]);
+$conf2 = $conf1->with('age', 40);
+
+$conf1->toArray(); // ['name'=>'John']
+$conf2->toArray(); // ['name'=>'John', 'age'=>40]
+
+# Set
+$conf1->set('foo', 'bar'); // FATAL ERROR: Call to undefined method Config::set()
+$conf1->foo   = 'bar';     // throws \Logikos\Util\CanNotMutateException
+$conf1['foo'] = 'bar';     // throws \Logikos\Util\CanNotMutateException
+
+# Merge
+$conf1->merge([]);         // FATAL ERROR: Call to undefined method Config::set()
 ```
