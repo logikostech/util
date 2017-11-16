@@ -15,37 +15,17 @@ Utility classes
 ### Composer
 
 Install Composer in a common location or in your project:
-
 ```bash
 curl -s http://getcomposer.org/installer | php
 ```
 
-create or edit the `composer.json` file as follows:
-
-```json
-    {
-        "repositories": [
-            {
-                "type": "git",
-                "url": "https://github.com/logikostech/util"
-            }
-        ],
-        "require": {
-            "logikostech/uril": "dev-master"
-        }
-    }
-```
-
-Run the composer installer:
-
+Require library:
 ```bash
-    $ php composer.phar install
+composer.phar require logikos/util
 ```
 
 ### GitHub
-
 Just clone the repository in a common location or inside your project:
-
 ```bash
     git clone https://github.com/logikostech/util.git
 ```
