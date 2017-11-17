@@ -36,20 +36,10 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   public function toArray() {
     return array_map(
         function ($value) {
-          return $this->extractValue($value);
+          return $this->hasToArray($value) ? $value->toArray() : $value;
         },
         $this->values
     );
-  }
-
-  /**
-   * @param $value Config|mixed
-   * @return mixed
-   */
-  private function extractValue($value) {
-    return $this->hasToArray($value)
-        ? $value->toArray()
-        : $value;
   }
 
   private function hasToArray($value): bool {
@@ -113,7 +103,7 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
    * @param array $data
    * @return static
    */
-  public static function __set_state(array $data) {
+  public static function __set_state(array $data): Config {
     return new static($data);
   }
 
