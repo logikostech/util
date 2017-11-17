@@ -35,14 +35,25 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
 
   public function toArray() {
     $array = [];
-    foreach ($this->values as $key => $value) {
-      if (is_object($value) && method_exists($value, 'toArray')) {
-        $array[$key] = $value->toArray();
-        continue;
-      }
-      $array[$key] = $value;
-    }
+
+    foreach ($this->values as $key => $value)
+      $array[$key] = $this->extractValue($value);
+
     return $array;
+  }
+
+  /**
+   * @param $value Config|mixed
+   * @return mixed
+   */
+  private function extractValue($value) {
+    return $this->hasToArray($value)
+        ? $value->toArray()
+        : $value;
+  }
+
+  private function hasToArray($value): bool {
+    return is_object($value) && method_exists($value, 'toArray');
   }
 
   public function path($path, $default = null, $delimiter = '.') {

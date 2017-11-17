@@ -26,10 +26,9 @@ class MutableConfig extends Config {
   }
 
   private function isConfigObjectMerge($key, $value) {
-    if (!$this->offsetExists($key)) return false;
-    if (!$this->isConfigObject($value)) return false;
-    if (!$this->isConfigObject($this->{$key})) return false;
-    return true;
+    return $this->offsetExists($key)
+        && $this->isConfigObject($value)
+        && $this->isConfigObject($this->{$key});
   }
 
   private function keyForMerge($key) {
