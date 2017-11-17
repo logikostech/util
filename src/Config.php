@@ -62,7 +62,7 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   }
 
   private function getFirstToken($path, $delimiter) {
-    return $this->subtok($path, $delimiter, 0, 1);
+    return $this->gettok($path, $delimiter,0);
   }
 
   private function evalSubPath($path, $delimiter, $default) {
@@ -91,8 +91,12 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
    * @param  int|null $length    length, like in substr
    * @return string
    */
-  function subtok($string, $delimiter, $offset, $length = NULL) {
+  private function subtok($string, $delimiter, $offset, $length = NULL) {
     return implode($delimiter, array_slice(explode($delimiter, $string), $offset, $length));
+  }
+
+  private function gettok($string, $delimiter, $offset) {
+    return explode($delimiter, $string)[$offset];
   }
 
   # Countable
