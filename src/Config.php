@@ -47,13 +47,53 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   }
 
   public function path($path, $default = null, $delimiter = '.') {
-    $tokens = explode($delimiter, $path);
-    $token  = array_shift($tokens);
-    if ($this->get($token) instanceof self)
-      return $this[$token]->path(implode('.', $tokens), $default);
-    return $this->get($token, $default);
+    if ($this->pathStartsWithConfig($path, $delimiter))
+      return $this->evalSubPath($path, $delimiter, $default);
+
+    return $this->get($this->getFirstToken($path, $delimiter), $default);
   }
 
+  private function pathStartsWithConfig($path, $delimiter) {
+    return $this->getFirstTokenValue($path, $delimiter) instanceof self;
+  }
+
+  private function getFirstTokenValue($path, $delimiter) {
+    return $this->get($this->getFirstToken($path, $delimiter));
+  }
+
+  private function getFirstToken($path, $delimiter) {
+    return $this->subtok($path, $delimiter, 0, 1);
+  }
+
+  private function evalSubPath($path, $delimiter, $default) {
+    return $this->getFirstTokenValue($path, $delimiter)->path(
+        $this->subtok($path, $delimiter, 1),
+        $default,
+        $delimiter
+    );
+  }
+
+  /**
+   * subtok(string, delimiter, offset, length)
+   *
+   * Usage:
+   *  subtok('a.b.c.d.e','.',0)     = 'a.b.c.d.e'
+   *  subtok('a.b.c.d.e','.',0,2)   = 'a.b'
+   *  subtok('a.b.c.d.e','.',2,1)   = 'c'
+   *  subtok('a.b.c.d.e','.',2,-1)  = 'c.d'
+   *  subtok('a.b.c.d.e','.',-4)    = 'b.c.d.e'
+   *  subtok('a.b.c.d.e','.',-4,2)  = 'b.c'
+   *  subtok('a.b.c.d.e','.',-4,-1) = 'b.c.d'
+   *
+   * @param  string   $string    The input string
+   * @param  string   $delimiter The boundary string
+   * @param  int      $offset    starting position, like in substr
+   * @param  int|null $length    length, like in substr
+   * @return string
+   */
+  function subtok($string, $delimiter, $offset, $length = NULL) {
+    return implode($delimiter, array_slice(explode($delimiter, $string), $offset, $length));
+  }
 
   # Countable
   public function count() {
