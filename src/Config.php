@@ -34,12 +34,12 @@ abstract class Config implements \ArrayAccess, \Countable, \Iterator {
   }
 
   public function toArray() {
-    $array = [];
-
-    foreach ($this->values as $key => $value)
-      $array[$key] = $this->extractValue($value);
-
-    return $array;
+    return array_map(
+        function ($value) {
+          return $this->extractValue($value);
+        },
+        $this->values
+    );
   }
 
   /**
