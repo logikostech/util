@@ -38,13 +38,20 @@ class Option {
         && !empty($name);
   }
 
-  public function isValidValue($value) {
-    $isValid = true;
+  public function validationMessages($value) {
+    $messages = [];
 
     foreach ($this->validators as $validator)
       if (!$validator->validate($value))
-        $isValid = false;
+        array_push($messages, $validator->getMessage());
 
-    return $isValid;
+    return $messages;
+  }
+
+  public function isValidValue($value) {
+    foreach ($this->validators as $validator)
+      if (!$validator->validate($value))
+        return false;
+    return true;
   }
 }

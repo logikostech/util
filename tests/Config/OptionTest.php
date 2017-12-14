@@ -32,7 +32,7 @@ class OptionTest extends TestCase {
     $this->assertTrue($o->isValidValue(1));
   }
 
-  public function testMultipelValidators() {
+  public function testMultipleValidators() {
     $o = Option::withValidators(
         'password',
         $this->lengthValidator(5),
@@ -41,6 +41,40 @@ class OptionTest extends TestCase {
     $this->assertTrue($o->isValidValue('some string longer than 5 chars'));
     $this->assertFalse($o->isValidValue('str'));
     $this->assertFalse($o->isValidValue(123456789));
+  }
+
+  public function testValidationMessages() {
+    $lengthValidator = $this->lengthValidator(5);
+    $stringValidator = $this->stringValidator();
+
+    $o = Option::withValidators(
+        'password',
+        $lengthValidator,
+        $stringValidator
+    );
+
+    $this->assertEquals(
+        [
+            $lengthValidator->getMessage()
+        ],
+        $o->validationMessages('str')
+    );
+
+    $this->assertEquals(
+        [
+            $stringValidator->getMessage()
+        ],
+        $o->validationMessages(123456)
+    );
+
+    ;
+    $this->assertEquals(
+        [
+            $lengthValidator->getMessage(),
+            $stringValidator->getMessage()
+        ],
+        $o->validationMessages(123)
+    );
   }
 
   private function assertInvalidOptionName($name) {
