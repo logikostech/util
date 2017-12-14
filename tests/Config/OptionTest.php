@@ -12,18 +12,29 @@ class OptionTest extends TestCase {
     $this->assertSame($name, $o->getName());
   }
 
-  public function testNoNameThrowsException() {
-    $this->expectException(Option\InvalidOptionNameException::class);
-    new Option();
+  public function testInvalidOptionNamesFail() {
+    $this->assertInvalidOptionName(null);
+    $this->assertInvalidOptionName(true);
+    $this->assertInvalidOptionName('');
+    $this->assertInvalidOptionName(['foo'=>'bar']);
+    $this->assertInvalidOptionName((object) ['foo'=>'bar']);
   }
 
-  public function testNullNameThrowsException() {
-    $this->expectException(Option\InvalidOptionNameException::class);
-    new Option(null);
+  public function testValidOptionNamesPass() {
+    $this->assertIsValidOptionName('string');
+    $this->assertIsValidOptionName(123);
   }
 
-  public function testEmptyNameThrowsException() {
-    $this->expectException(Option\InvalidOptionNameException::class);
-    new Option('');
+  private function assertInvalidOptionName($name) {
+    $this->assertExceptionWillThrow(
+        Option\InvalidOptionNameException::class,
+        function() use ($name) { new Option($name); }
+    );
   }
+
+  private function assertIsValidOptionName($name) {
+    // we just need to make sure an exception is not thrown...
+    $this->assertInstanceOf(Option::class, new Option($name));
+  }
+
 }

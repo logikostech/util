@@ -3,6 +3,7 @@
 namespace Logikos\Util\Tests\Config;
 
 use Logikos\Util\Config;
+use PHPUnit\Framework\AssertionFailedError;
 
 class TestCase extends \PHPUnit\Framework\TestCase {
 
@@ -17,5 +18,22 @@ class TestCase extends \PHPUnit\Framework\TestCase {
 
   protected function assertKeyNotExists(Config $conf, $offset) {
     $this->assertFalse($conf->offsetExists($offset));
+  }
+
+  protected function assertExceptionWillThrow($type, callable $callable) {
+    try {
+      $callable();
+      $this->fail("Failed to assert that {$type} would be thrown");
+    }
+    catch(AssertionFailedError $e) {
+      throw $e; // we are just excludeing this type from the catch bellow ...
+    }
+    catch (\Exception $e) {
+      $this->assertInstanceOf(
+          $type,
+          $e,
+          "Expected Exception: {$type} \n Actual: ".get_class($e)
+      );
+    }
   }
 }

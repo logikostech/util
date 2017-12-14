@@ -7,6 +7,10 @@ use Logikos\Util\Config\Option\InvalidOptionNameException;
 class Option {
   private $name;
 
+  /**
+   * @param string $name
+   * @throws InvalidOptionNameException
+   */
   public function __construct($name = null) {
     if (!$this->isValidName($name))
       throw new InvalidOptionNameException();
@@ -18,7 +22,8 @@ class Option {
   }
 
   private function isValidName($name) {
-    if (empty($name)) return false;
-    return true;
+    return is_int($name)
+        || is_string($name)
+        && !empty($name);
   }
 }
