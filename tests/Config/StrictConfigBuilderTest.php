@@ -2,21 +2,26 @@
 
 namespace Logikos\Util\Tests\Config;
 
-use Logikos\Util\Config\StrictConfigBuilder;
-use Logikos\Util\StrictConfig;
+use Logikos\Util\Config;
 
 class StrictConfigBuilderTest extends TestCase {
-  /** @var  StrictConfigBuilder */
+  /** @var  Config\StrictConfigBuilder */
   private $sut;
 
   public function setUp() {
-    $this->sut = new StrictConfigBuilder();
+    $this->sut = new Config\StrictConfigBuilder();
   }
 
   Public function testBuildReturnsStrictConfig() {
     $this->assertInstanceOf(
-        StrictConfig::class,
+        Config\StrictConfig::class,
         $this->sut->build()
     );
+  }
+
+  public function testCanAddOption() {
+    $this->markTestSkipped('WIP');
+    $this->sut->addOption(new Config\Option('name'));
+
   }
 }

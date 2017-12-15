@@ -32,12 +32,6 @@ class Option {
     return $this->name;
   }
 
-  private function isValidName($name) {
-    return is_int($name)
-        || is_string($name)
-        && !empty($name);
-  }
-
   public function validationMessages($value) {
     $messages = [];
 
@@ -53,5 +47,11 @@ class Option {
       if (!$validator->validate($value))
         return false;
     return true;
+  }
+
+  private function isValidName($name) {
+    return is_int($name)
+        || is_string($name)
+        && !empty($name);
   }
 }
