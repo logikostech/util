@@ -27,7 +27,18 @@ class StrictConfigTest extends TestCase {
   }
 
   public function testSetValueRunsOptionValidation() {
-    $this->markTestSkipped();
+    $sut = new class extends StrictConfig {
+      public function onConstruct() {
+        $this->addOption(new class implements Option {
+          public function getName() { return 'age'; }
+          public function validationMessages($v) {}
+          public function isValidValue($v) { return is_int($v); }
+        });
+      }
+    };
+
+    $this->expectException(Option\InvalidOptionValueException::class);
+    $sut['age'] = 'string';
   }
 
   private function alwaysValidOption($name) {

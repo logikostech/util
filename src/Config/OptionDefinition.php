@@ -9,7 +9,7 @@ class OptionDefinition implements Option {
   private $name;
 
   /** @var Validator[] */
-  private $validators;
+  private $validators = [];
 
   /**
    * @param  string $name

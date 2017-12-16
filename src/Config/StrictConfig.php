@@ -17,6 +17,9 @@ abstract class StrictConfig extends Config {
     if (!array_key_exists($offset, $this->options))
       throw new OptionNotDefinedException();
 
+    if (!$this->options[$offset]->isValidValue($value))
+      throw new Config\Option\InvalidOptionValueException();
+
     parent::offsetSet($offset, $value);
   }
 
