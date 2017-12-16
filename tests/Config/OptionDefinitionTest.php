@@ -3,13 +3,14 @@
 namespace Logikos\Util\Tests\Config;
 
 
-use Logikos\Util\Config\Option;
-use Logikos\Util\Config\Option\Validator\Set;
+use Logikos\Util\Config\Option\InvalidOptionNameException;
+use Logikos\Util\Config\OptionDefinition;
+use Logikos\Util\Config\Option\Validator;
 
-class OptionTest extends TestCase {
+class OptionDefinitionTest extends TestCase {
   public function testSetAndGetOptionName() {
     $name = 'first-name';
-    $o = new Option($name);
+    $o = new OptionDefinition($name);
     $this->assertSame($name, $o->getName());
   }
 
@@ -27,13 +28,13 @@ class OptionTest extends TestCase {
   }
 
   public function testWithValidator() {
-    $o = Option::withValidators('age', $this->intValidator());
+    $o = OptionDefinition::withValidators('age', $this->intValidator());
     $this->assertFalse($o->isValidValue('string'));
     $this->assertTrue($o->isValidValue(1));
   }
 
   public function testMultipleValidators() {
-    $o = Option::withValidators(
+    $o = OptionDefinition::withValidators(
         'password',
         $this->lengthValidator(5),
         $this->stringValidator()
@@ -47,7 +48,7 @@ class OptionTest extends TestCase {
     $lengthValidator = $this->lengthValidator(5);
     $stringValidator = $this->stringValidator();
 
-    $o = Option::withValidators(
+    $o = OptionDefinition::withValidators(
         'password',
         $lengthValidator,
         $stringValidator
@@ -79,32 +80,32 @@ class OptionTest extends TestCase {
 
   private function assertInvalidOptionName($name) {
     $this->assertExceptionWillThrow(
-        Option\InvalidOptionNameException::class,
-        function() use ($name) { new Option($name); }
+        InvalidOptionNameException::class,
+        function() use ($name) { new OptionDefinition($name); }
     );
   }
 
   private function assertIsValidOptionName($name) {
     // we just need to make sure an exception is not thrown...
-    $this->assertInstanceOf(Option::class, new Option($name));
+    $this->assertInstanceOf(OptionDefinition::class, new OptionDefinition($name));
   }
 
-  private function intValidator() : Option\Validator {
-    return new class implements Option\Validator {
+  private function intValidator() : Validator {
+    return new class implements Validator {
       public function validate($value) { return is_int($value);       }
       public function getMessage()     { return 'Must be an integer'; }
     };
   }
 
-  private function stringValidator() : Option\Validator {
-    return new class implements Option\Validator {
+  private function stringValidator() : Validator {
+    return new class implements Validator {
       public function validate($value) { return is_string($value);    }
       public function getMessage()     { return 'Must be an integer'; }
     };
   }
 
-  private function lengthValidator($minLength=3) : Option\Validator {
-    return new class($minLength) implements Option\Validator {
+  private function lengthValidator($minLength=3) : Validator {
+    return new class($minLength) implements Validator {
       private $min;
       public function __construct($minLength) { $this->min = $minLength; }
       public function validate($value) { return strlen($value) > $this->min; }
