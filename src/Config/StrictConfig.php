@@ -9,7 +9,8 @@ abstract class StrictConfig extends Config {
   /** @var  Option[] */
   private $options = [];
 
-  public function addOption(Option $option) {
+
+  protected function addOption(Option $option) {
     $this->options[$option->getName()] = $option;
   }
 
@@ -22,5 +23,34 @@ abstract class StrictConfig extends Config {
 
     parent::offsetSet($offset, $value);
   }
+
+  public function isValid() {
+    foreach ($this->options as $option) {
+      if (!$this->isOptionValueValid($option))
+        return false;
+    }
+    return true;
+  }
+
+  public function validationMessages() {
+    $messages = [];
+    foreach ($this->options as $option) {
+      if (!$this->isOptionValueValid($option)) {
+        $messages[$option->getName()] = $option->validationMessages($this->get($option->getName(), null));
+      }
+    }
+    return $messages;
+  }
+
+  private function getValueOrNull(Option $option) {
+    return $this->offsetExists($option->getName())
+        ? $this->offsetGet($option->getName())
+        : null;
+  }
+
+  private function isOptionValueValid(Option $option) {
+    return $option->isValidValue($this->getValueOrNull($option));
+  }
+
 
 }
