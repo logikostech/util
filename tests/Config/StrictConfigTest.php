@@ -39,8 +39,14 @@ class StrictConfigTest extends TestCase {
     $validConfig   = $this->strictConfigWithOptions($this->alwaysValidOption());
     $invalidConfig = $this->strictConfigWithOptions($this->alwaysInvalidOption());
 
-    $this->assertSame(false, $invalidConfig->isValid());
-    $this->assertSame(true,  $validConfig->isValid());
+    $this->assertConfigValid($validConfig);
+    $this->assertConfigNotValid($invalidConfig);
+  }
+
+  public function testIsValidWithOptionSet() {
+    $sut = $this->strictConfigWithOptions($this->alwaysValidOption('age'));
+    $sut['age'] = 40;
+    $this->assertConfigValid($sut);
   }
 
   public function testCanGetInvalidOptionMessages() {
@@ -57,6 +63,15 @@ class StrictConfigTest extends TestCase {
         ],
         $sut->validationMessages()
     );
+  }
+
+
+  private function assertConfigValid(StrictConfig $config) {
+    $this->assertTrue($config->isValid());
+  }
+
+  private function assertConfigNotValid(StrictConfig $config) {
+    $this->assertFalse($config->isValid());
   }
 
   private function strictConfigWithOptions(Option ...$optionList) : StrictConfig {
