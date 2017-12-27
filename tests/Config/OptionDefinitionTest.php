@@ -23,8 +23,8 @@ class OptionDefinitionTest extends TestCase {
   }
 
   public function testValidOptionNamesPass() {
-    $this->assertIsValidOptionName('string');
-    $this->assertIsValidOptionName(123);
+    $this->assertValidOptionName('string');
+    $this->assertValidOptionName(123);
   }
 
   public function testWithValidator() {
@@ -42,6 +42,43 @@ class OptionDefinitionTest extends TestCase {
     $this->assertTrue($o->isValidValue('some string longer than 5 chars'));
     $this->assertFalse($o->isValidValue('str'));
     $this->assertFalse($o->isValidValue(123456789));
+  }
+
+  public function testAddValidators() {
+    $o = new OptionDefinition('foo');
+    $o->addValidators(
+        $this->lengthValidator(5),
+        $this->stringValidator()
+    );
+    $this->assertTrue($o->isValidValue('some string longer than 5 chars'));
+    $this->assertFalse($o->isValidValue('str'));
+    $this->assertFalse($o->isValidValue(123456789));
+  }
+
+  public function testMakeRequired() {
+    $o = new OptionDefinition('foo');
+    $this->assertFalse($o->isRequired());
+    $o->makeRequired();
+    $this->assertTrue($o->isRequired());
+    $o->notRequired();
+    $this->assertFalse($o->isRequired());
+  }
+
+  public function testRequiredValidationMessage() {
+    $o = new OptionDefinition('foo');
+    $o->makeRequired('message');
+    $this->assertEquals(
+        ['message'],
+        $o->validationMessages()
+    );
+  }
+
+  public function testNotRequiredWithValidatorIsValidIfNull() {
+    $o = new OptionDefinition('foo');
+    $o->notRequired();
+    $o->addValidators($this->intValidator());
+    $this->assertTrue($o->isValidValue(null));
+    $this->assertSame(0, count($o->validationMessages(null)));
   }
 
   public function testValidationMessages() {
@@ -85,7 +122,7 @@ class OptionDefinitionTest extends TestCase {
     );
   }
 
-  private function assertIsValidOptionName($name) {
+  private function assertValidOptionName($name) {
     // we just need to make sure an exception is not thrown...
     $this->assertInstanceOf(OptionDefinition::class, new OptionDefinition($name));
   }
