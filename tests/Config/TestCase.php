@@ -26,7 +26,7 @@ class TestCase extends \PHPUnit\Framework\TestCase {
       $this->fail("Failed to assert that {$type} would be thrown");
     }
     catch(AssertionFailedError $e) {
-      throw $e; // we are just excludeing this type from the catch bellow ...
+      throw $e; // we are just excluding this type from the catch bellow ...
     }
     catch (\Exception $e) {
       $this->assertInstanceOf(
