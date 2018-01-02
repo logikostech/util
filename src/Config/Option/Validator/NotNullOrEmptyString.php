@@ -11,6 +11,6 @@ class NotNullOrEmptyString implements Validator {
   }
 
   public function getMessage() {
-    return 'Value van not be null or empty string';
+    return 'Value can not be null or empty string';
   }
 }

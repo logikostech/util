@@ -19,4 +19,9 @@ class NotNullOrEmptyStringTest extends TestCase {
     $this->assertIsValid($sut, ' ');
     $this->assertIsValid($sut, "abc ABC 123 !@#$%^&*()_+-=[]{}\\|;:,.<>/?\n\r\t");
   }
+
+  public function testCanGetMessage() {
+    $sut = new NotNullOrEmptyString();
+    $this->assertTrue(strlen($sut->getMessage()) > 1);
+  }
 }

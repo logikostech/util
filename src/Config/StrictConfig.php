@@ -51,15 +51,6 @@ abstract class StrictConfig extends Config {
     return $messages;
   }
 
-  public function AllMessages() {
-    $messages = [];
-    foreach ($this->options as $option) {
-      $messages[$option->getName()] = $option->validationMessages($this->get($option->getName(), null));
-    }
-    return $messages;
-  }
-
-
   private function getValueOrNull(Option $option) {
     return $this->offsetExists($option->getName())
         ? $this->offsetGet($option->getName())

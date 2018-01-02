@@ -3,8 +3,7 @@
 namespace Logikos\Util\Tests\Config;
 
 use Logikos\Util\Config\Option;
-use Logikos\Util\Config\Option\Validator;
-use Logikos\Util\Config\OptionDefinition;
+use Logikos\Util\Config\Option\NonRequiredOption;
 use Logikos\Util\Config\OptionNotDefinedException;
 use Logikos\Util\Config\StrictConfig;
 
@@ -13,7 +12,7 @@ class StrictConfigTest extends TestCase {
   public function testCanDefineSettableOption() {
     $sut = new class extends StrictConfig {
       public function onConstruct() {
-        $this->addOption(new OptionDefinition('name'));
+        $this->addOption(new NonRequiredOption('name'));
       }
     };
 
@@ -68,8 +67,8 @@ class StrictConfigTest extends TestCase {
 
   public function testGetOptionKeys() {
     $sut = $this->strictConfigWithOptions(
-        new OptionDefinition('foo'),
-        new OptionDefinition('bar')
+        $this->alwaysValidOption('foo'),
+        $this->alwaysValidOption('bar')
     );
     $this->assertSame(
         ['foo', 'bar'],
@@ -81,8 +80,8 @@ class StrictConfigTest extends TestCase {
     $sut = new class extends StrictConfig {
       protected function onConstruct() {
         $this->addOptions(
-            new OptionDefinition('name'),
-            new OptionDefinition('age')
+            new NonRequiredOption('name'),
+            new NonRequiredOption('age')
         );
       }
     };
@@ -91,44 +90,6 @@ class StrictConfigTest extends TestCase {
         $sut->getOptionKeys()
     );
   }
-
-  public function testGetOptions() {
-    $sut = new class extends StrictConfig {
-      protected function onConstruct() {
-        $this->addOptions(
-            OptionDefinition::withValidators(
-                'name',
-                new Validator\PatternMatch(
-                    '/[a-zA-Z]/',
-                    'May contain only upper and lower case letters'
-                ),
-                new Validator\PatternMatch(
-                    '/[a-zA-Z]/',
-                    'Must be between 2 and 30 characters long'
-                )
-            ),
-            OptionDefinition::withValidators(
-                'age',
-                new Validator\Custom(
-                    function($v){return is_int($v) && $v>0;},
-                    'Must be a number greater than zero'
-                )
-            ),
-            new OptionDefinition('fav color')
-        );
-      }
-    };
-    $expected = [
-        'name' => [
-            'May contain only upper and lower case letters',
-            'Must be between 2 and 30 characters long'
-        ],
-        'age' => ['Must be a number greater than zero'],
-        'fav color' => []
-    ];
-    $this->assertEquals($expected, $sut->AllMessages());
-  }
-
 
   private function assertConfigValid(StrictConfig $config) {
     $this->assertTrue($config->isValid());
@@ -158,6 +119,7 @@ class StrictConfigTest extends TestCase {
       public function getName()              { return $this->name;  }
       public function validationMessages($v) { return [];           }
       public function isValidValue($v)       { return true;         }
+      public function isRequired()           { return false;        }
     };
   }
 
@@ -170,6 +132,7 @@ class StrictConfigTest extends TestCase {
       public function getName()              { return $this->name;    }
       public function validationMessages($v) { return $this->reasons; }
       public function isValidValue($v)       { return false;          }
+      public function isRequired()           { return false;        }
     };
   }
 }

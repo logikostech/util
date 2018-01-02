@@ -6,4 +6,5 @@ interface Option {
   public function getName();
   public function validationMessages($value);
   public function isValidValue($value);
+  public function isRequired();
 }

@@ -42,4 +42,30 @@ class RegistryTest extends TestCase {
     foreach ($reg as $k => $v) $i++;
     $this->assertEquals(2, $i);
   }
+
+  public function testCount() {
+    $reg = new Registry();
+    $reg->a = 'foo';
+    $this->assertSame(1, count($reg));
+    $this->assertSame(1, $reg->count());
+  }
+
+  public function testGetOffsetThatDoesNotExistThrowsException() {
+    $reg = new Registry();
+    $this->expectException(\OutOfBoundsException::class);
+    $reg['foo'];
+  }
+
+  public function testGetRawValuesFromSubclass() {
+    $sut = new class extends Registry {
+      public function exposedRawValues() {
+        return $this->rawValues();
+      }
+    };
+    $sut->foo = 'bar';
+    $this->assertEquals(
+        ['foo'=>'bar'],
+        $sut->exposedRawValues()
+    );
+  }
 }
