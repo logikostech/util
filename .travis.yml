@@ -28,7 +28,6 @@ install:
 # Create a storage folder for Coverage report
 before_script:
   - mkdir -p build/logs
-  - ls -al
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
