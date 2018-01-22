@@ -12,6 +12,11 @@ use Logikos\Util\Config\PathEval;
 abstract class Config extends Registry {
   private $locked   = false;
 
+  /**
+   * Config constructor.
+   * @param array $arrayConfig
+   * @throws CanNotMutateException
+   */
   public function __construct(array $arrayConfig = []) {
     parent::__construct();
     foreach($arrayConfig as $key => $value)
@@ -38,6 +43,7 @@ abstract class Config extends Registry {
   public function toArray() {
     return array_map(
         function ($value) {
+          // $value may be another Config object, if so then we toArray() it also.
           return $this->hasToArray($value) ? $value->toArray() : $value;
         },
         $this->rawValues()
@@ -55,6 +61,12 @@ abstract class Config extends Registry {
 
 
   # ArrayAccess
+
+  /**
+   * @param $offset
+   * @param $value
+   * @throws CanNotMutateException
+   */
   public function offsetSet($offset, $value) {
     $this->blockIfLocked();
     parent::offsetSet(
@@ -63,6 +75,10 @@ abstract class Config extends Registry {
     );
   }
 
+  /**
+   * @param $offset
+   * @throws CanNotMutateException
+   */
   public function offsetUnset($offset) {
     $this->blockIfLocked();
     parent::offsetUnset($offset);
@@ -81,6 +97,9 @@ abstract class Config extends Registry {
     return $value instanceof Config;
   }
 
+  /**
+   * @throws CanNotMutateException
+   */
   private function blockIfLocked() {
     if ($this->isLocked())
       throw new CanNotMutateException();
