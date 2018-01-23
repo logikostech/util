@@ -6,6 +6,8 @@ use Logikos\Util\Config\Option;
 use Logikos\Util\Config\Option\NonRequiredOption;
 use Logikos\Util\Config\OptionNotDefinedException;
 use Logikos\Util\Config\StrictConfig;
+use Logikos\Util\Tests\Config\Option\AlwaysInvalidOption;
+use Logikos\Util\Tests\Config\Option\AlwaysValidOption;
 
 class StrictConfigTest extends TestCase {
 
@@ -113,26 +115,10 @@ class StrictConfigTest extends TestCase {
 
 
   private function alwaysValidOption($name='alwaysValid') {
-    return new class($name) implements Option {
-      private $name;
-      public function __construct($name)     { $this->name = $name; }
-      public function getName()              { return $this->name;  }
-      public function validationMessages($v) { return [];           }
-      public function isValidValue($v)       { return true;         }
-      public function isRequired()           { return false;        }
-    };
+    return new AlwaysValidOption($name);
   }
 
   private function alwaysInvalidOption($name='alwaysInvalid', $reasons=['reason']) {
-    return new class($name, $reasons) implements Option {
-      private $name, $reasons;
-      public function __construct($name, $reason) {
-        $this->name = $name; $this->reasons = $reason;
-      }
-      public function getName()              { return $this->name;    }
-      public function validationMessages($v) { return $this->reasons; }
-      public function isValidValue($v)       { return false;          }
-      public function isRequired()           { return false;        }
-    };
+    return new AlwaysInvalidOption($name, $reasons);
   }
 }
