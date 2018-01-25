@@ -12,10 +12,27 @@ class RequiredFieldTest extends TestCase {
   }
 
   public function testIsInvalidWhenNull() {
-    $this->assertValid(new RequiredField, null);
+    $field = new RequiredField;
+    $this->assertIsNotValid($field, null, 1);
   }
 
-  protected function assertValid(Field $field, $value) {
+  public function testIsInvalidWhenEmptyString() {
+    $field = new RequiredField;
+    $this->assertIsNotValid($field, '', 1);
+  }
+
+  public function testIsValidWhenNotNullOrEmpty() {
+    $field = new RequiredField;
+    $this->assertIsValid($field, 'foo');
+  }
+
+  protected function assertIsNotValid(Field $field, $value, $msgCount=1) {
+    $result = $field->validate($value);
+    $this->assertFalse($result->isValid());
+    $this->assertEquals($msgCount, count($result->getMessages()));
+  }
+
+  protected function assertIsValid(Field $field, $value) {
     $this->assertTrue($field->validate($value)->isValid());
   }
 }
