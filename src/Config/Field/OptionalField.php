@@ -2,8 +2,8 @@
 
 namespace Logikos\Util\Config\Field;
 
-class RequiredField extends Field {
+class OptionalField extends Field {
   public function isRequired() : bool {
-    return true;
+    return false;
   }
 }

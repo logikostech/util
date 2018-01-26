@@ -7,7 +7,17 @@ use Logikos\Util\Config;
 
 class ValidConfigTest extends TestCase {
   public function testImplementsConfig() {
-    $this->assertInstanceOf(Config::class, new Config\ValidConfig());
+    $sut = new class extends Config\ValidConfig {
+      protected function initialize() {}
+    };
+    $this->assertInstanceOf(Config::class, $sut);
   }
 
+  protected function validConfig() {
+    new class extends Config\ValidConfig {
+      protected function initialize() {
+
+      }
+    };
+  }
 }
