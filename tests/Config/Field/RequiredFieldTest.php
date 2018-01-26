@@ -23,19 +23,14 @@ class RequiredFieldTest extends TestCase {
     $this->assertTrue((new RequiredField('username'))->isRequired());
   }
 
-  public function testIsInvalidWhenNull() {
-    $field = new RequiredField('username');
-    $this->assertIsNotValid($field, null, 1);
-  }
-
-  public function testIsInvalidWhenEmptyString() {
-    $field = new RequiredField('username');
-    $this->assertIsNotValid($field, '', 1);
+  public function testIsInvalidWhenNullOrEmpty() {
+    $this->assertIsNotValid(new RequiredField('username'), null, 1);
+    $this->assertIsNotValid(new RequiredField('username'), '', 1);
   }
 
   public function testIsValidWhenNotNullOrEmpty() {
-    $field = new RequiredField('username');
-    $this->assertIsValid($field, 'foo');
+    $this->assertIsValid(new RequiredField('username'), 'foo');
+    $this->assertIsValid(new RequiredField('username'), 123);
   }
 
   public function testAddValidationRegexPattern() {
@@ -54,4 +49,32 @@ class RequiredFieldTest extends TestCase {
     $this->assertIsNotValid($field, 'aa', 1);
     $this->assertIsNotValid($field, 'a1', 2);
   }
+
+  public function testInvalidRegexPatternThrowsException() {
+    $field = new RequiredField('username');
+    $this->expectException(Field\Validation\Validator\Exception::class);
+    $field->addPattern('invalid pattern', 'desc');
+  }
+
+  public function testAddCallable() {
+    $field = new RequiredField('age');
+    $field->addCallable(
+        'is_int',
+        "Value must be a real integer"
+    );
+    $field->addCallable(
+        [$this, 'ageCheck'],
+        "Way to old!"
+    );
+    $field->addCallable(
+        function($v){ return !is_int($v) || $v >= 18; },
+        "Not old enough"
+    );
+    $this->assertIsValid($field, 25);
+    $this->assertIsNotValid($field, 'abc', 1);
+    $this->assertIsNotValid($field, 10, 1);
+    $this->assertIsNotValid($field, 110, 1);
+  }
+
+  public function ageCheck($value) { return !is_int($value) || $value <= 100; }
 }

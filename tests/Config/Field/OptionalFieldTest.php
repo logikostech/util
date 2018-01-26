@@ -10,13 +10,10 @@ class OptionalFieldTest extends TestCase {
     $this->assertFalse((new OptionalField('foo'))->isRequired());
   }
 
-  public function testIsInvalidWhenNull() {
-    $field = new OptionalField('username');
-    $this->assertIsValid($field, null);
+  public function testIsValidWhenNullOrEmpty() {
+    $this->assertIsValid(new OptionalField('username'), null);
+    $this->assertIsValid(new OptionalField('username'), '');
   }
 
-  public function testIsInvalidWhenEmptyString() {
-    $field = new OptionalField('username');
-    $this->assertIsValid($field, '');
-  }
+  
 }

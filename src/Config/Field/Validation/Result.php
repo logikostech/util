@@ -1,8 +1,8 @@
 <?php
 
-namespace Logikos\Util\Config\Field;
+namespace Logikos\Util\Config\Field\Validation;
 
-interface ValidationResult {
+interface Result {
   const VALID   = true;
   const INVALID = false;
 

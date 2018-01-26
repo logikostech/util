@@ -2,9 +2,7 @@
 
 namespace Logikos\Util\Config\Field\Validation;
 
-use Logikos\Util\Config\Field\ValidationResult;
-
-class InvalidResult implements ValidationResult {
+class InvalidResult implements Result {
 
   private $messages;
 
