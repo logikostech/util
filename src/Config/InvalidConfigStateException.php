@@ -4,20 +4,20 @@ namespace Logikos\Util\Config;
 
 class InvalidConfigStateException extends \RuntimeException {
 
-  /** @var StrictConfig */
+  /** @var ValidConfig */
   private $config;
 
-  public function __construct(StrictConfig $config) {
+  public function __construct(ValidConfig $config) {
     $this->config = $config;
     parent::__construct($this->getMessagesAsYmlString());
   }
 
   public function getMessagesAsYmlString() {
     $string = '';
-    foreach ($this->config->validationMessages() as $optionName => $messages) {
+    foreach ($this->config->validationMessages() as $fieldName => $messages) {
       $string .= sprintf(
           "\n%s:\n- %s",
-          $optionName,
+          $fieldName,
           implode("\n- ", $messages)
       );
     }

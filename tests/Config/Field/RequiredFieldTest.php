@@ -77,4 +77,14 @@ class RequiredFieldTest extends TestCase {
   }
 
   public function ageCheck($value) { return !is_int($value) || $value <= 100; }
+
+
+  public function testIsNotValidWhenNullOrEmptyEvenWithOtherValidatorsSet() {
+    $field = new RequiredField('favnum');
+    $field->addValidator($this->alwaysInvalidValidator());
+
+    $this->assertIsNotValid($field, null);
+    $this->assertIsNotValid($field, '');
+    $this->assertIsNotValid($field, 30);
+  }
 }

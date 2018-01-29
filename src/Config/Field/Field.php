@@ -12,9 +12,8 @@ abstract class Field implements FieldInterface {
   protected $name;
   protected $messages = [];
 
-  /** @var Validator\Regex[] */
-  protected $regex    = [];
-  protected $callable = [];
+  /** @var Validator[] */
+  protected $validators    = [];
 
   public function __construct($name) {
     $this->name = $name;
@@ -27,31 +26,29 @@ abstract class Field implements FieldInterface {
   }
 
   public function addPattern($pattern, $description) {
-    if (!$this->regex)
-      $this->regex = new Stream(Validator\Regex::class);
-
-    $this->regex = $this->regex->add(new Validator\Regex($pattern, $description));
+    $this->addValidator(new Validator\Regex($pattern, $description));
   }
 
   public function addCallable(callable $callable, $description) {
-    $this->callable[] = (object) [
-        'callable'    => $callable,
-        'description' => $description
-    ];
+    $this->addValidator(new Validator\Callback($callable, $description));
+  }
+
+  public function addValidator(Validator $validator) {
+    array_push($this->validators, $validator);
   }
 
   public function validate($value): ValidationResult {
-    $this->resetMessages();
-
-    if ($this->isRequired() && $this->isEmpty($value)) {
+    if ($this->isRequiredAndEmpty($value))
       $this->addMessage('Required');
-      return $this->validationResult();
-    }
 
-    $this->validateAgainstRegexPatterns($value);
-    $this->validateAgainstCallables($value);
+    if ($this->isNotEmpty($value))
+      $this->runValidators($value);
 
     return $this->validationResult();
+  }
+
+  protected function isRequiredAndEmpty($value) {
+    return $this->isRequired() && $this->isEmpty($value);
   }
 
   protected function addMessage($message) {
@@ -59,24 +56,11 @@ abstract class Field implements FieldInterface {
   }
 
   protected function validationResult() {
-    if (count($this->messages))
-      return new Validation\InvalidResult($this->messages);
-
-    return new Validation\ValidResult();
-  }
-
-  protected function validateAgainstRegexPatterns($value) {
-    foreach ($this->regex as $regexValidator) {
-      if (!$regexValidator->validate($value))
-        $this->addMessage($regexValidator->getDescription());
-    }
-  }
-
-  protected function validateAgainstCallables($value) {
-    foreach ($this->callable as $item) {
-      if (!call_user_func($item->callable, $value))
-        $this->addMessage($item->description);
-    }
+    $result = count($this->messages)
+        ? new Validation\InvalidResult($this->messages)
+        : new Validation\ValidResult();
+    $this->resetMessages();
+    return $result;
   }
 
   protected function resetMessages() {
@@ -85,5 +69,19 @@ abstract class Field implements FieldInterface {
 
   protected function isEmpty($value) {
     return is_null($value) || $value === '';
+  }
+
+  protected function isNotEmpty($value) {
+    return !$this->isEmpty($value);
+  }
+
+  /**
+   * @param $value
+   */
+  protected function runValidators($value) {
+    foreach ($this->validators as $validator) {
+      if (!$validator->validate($value))
+        $this->addMessage($validator->getDescription());
+    }
   }
 }

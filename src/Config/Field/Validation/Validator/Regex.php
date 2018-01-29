@@ -15,7 +15,7 @@ class Regex implements Validator {
    */
   public function __construct($pattern, $description = null) {
     if (!$this->isValidRegexPattern($pattern))
-      throw new Exception();
+      throw new Exception("Invalid Regex pattern: {$pattern}");
     $this->pattern = $pattern;
     $this->message = $description;
   }
@@ -24,7 +24,7 @@ class Regex implements Validator {
     return $this->pattern;
   }
 
-  public function validate($value) {
+  public function validate($value) : bool {
     return preg_match($this->pattern, $value) !== 0;
   }
 

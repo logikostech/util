@@ -15,5 +15,11 @@ class OptionalFieldTest extends TestCase {
     $this->assertIsValid(new OptionalField('username'), '');
   }
 
-  
+  public function testIsValidWhenNullOrEmptyEvenWithOtherValidatorsSet() {
+    $field = new OptionalField('favnum');
+    $field->addValidator($this->alwaysInvalidValidator());
+    $this->assertIsValid($field, null);
+    $this->assertIsValid($field, '');
+    $this->assertIsNotValid($field, 30);
+  }
 }
