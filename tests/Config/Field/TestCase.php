@@ -19,11 +19,19 @@ class TestCase extends ConfigTestCase {
     $this->assertTrue($field->validate($value)->isValid());
   }
 
-  /** @return Validator */
-  protected function alwaysInvalidValidator() {
+  protected function alwaysInvalidValidator($description = 'invalid') {
+    return new class($description) implements Validator {
+      private $desc;
+      public function __construct($desc)    { $this->desc = $desc; }
+      public function validate($value):bool { return false;        }
+      public function getDescription()      { return $this->desc;  }
+    };
+  }
+
+  protected function alwaysValidValidator() {
     return new class implements Validator {
-      public function validate($value):bool { return false; }
-      public function getDescription() { return 'invalid'; }
+      public function validate($value):bool { return true;        }
+      public function getDescription()      { return 'your good'; }
     };
   }
 }

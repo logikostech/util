@@ -5,61 +5,47 @@ namespace Logikos\Util\Config;
 use Logikos\Util\Config;
 
 abstract class StrictConfig extends Config {
+  /** @var  Field[] */
+  private $_fields = [];
 
-  /** @var  Option[] */
-  private $options = [];
-
-  public function getOptionKeys() {
-    return array_keys($this->options);
+  public final function onConstruct() {
+    $this->initialize();
   }
 
-
-  protected function addOption(Option $option) {
-    $this->options[$option->getName()] = $option;
-  }
-
-  protected function addOptions(Option ...$options) {
-    foreach ($options as $option)
-      $this->addOption($option);
-  }
-
-  public function offsetSet($offset, $value) {
-    if (!array_key_exists($offset, $this->options))
-      throw new OptionNotDefinedException();
-
-    if (!$this->options[$offset]->isValidValue($value))
-      throw new Config\Option\InvalidOptionValueException();
-
-    parent::offsetSet($offset, $value);
-  }
+  abstract protected function initialize();
 
   public function isValid() {
-    foreach ($this->options as $option) {
-      if (!$this->isOptionValueValid($option))
+    foreach ($this->_fields as $field) {
+      if (!$this->isFieldValid($field))
         return false;
     }
     return true;
   }
 
+  public function validate() {
+    if (!$this->isValid())
+      throw new InvalidConfigStateException($this);
+  }
+
   public function validationMessages() {
-    $messages = [];
-    foreach ($this->options as $option) {
-      if (!$this->isOptionValueValid($option)) {
-        $messages[$option->getName()] = $option->validationMessages($this->get($option->getName(), null));
-      }
+    $failures = [];
+    foreach ($this->_fields as $field) {
+      if (!$this->isFieldValid($field))
+        $failures[$field->getName()] = $this->fieldValidationMessages($field);
     }
-    return $messages;
+    return $failures;
   }
 
-  private function getValueOrNull(Option $option) {
-    return $this->offsetExists($option->getName())
-        ? $this->offsetGet($option->getName())
-        : null;
+  private function fieldValidationMessages(Field $field) {
+    return $field->validate($this->get($field->getName()))->getMessages();
   }
 
-  private function isOptionValueValid(Option $option) {
-    return $option->isValidValue($this->getValueOrNull($option));
+  private function isFieldValid(Field $field) {
+    return $field->validate($this->get($field->getName()))->isValid();
   }
 
+  protected function addFields(Field ...$fields) {
+    $this->_fields = $fields;
+  }
 
 }

@@ -2,123 +2,87 @@
 
 namespace Logikos\Util\Tests\Config;
 
-use Logikos\Util\Config\Option;
-use Logikos\Util\Config\Option\NonRequiredOption;
-use Logikos\Util\Config\OptionNotDefinedException;
-use Logikos\Util\Config\StrictConfig;
-use Logikos\Util\Tests\Config\Option\AlwaysInvalidOption;
-use Logikos\Util\Tests\Config\Option\AlwaysValidOption;
+
+use Logikos\Util\Config;
+use Logikos\Util\Config\InvalidConfigStateException;
+use Logikos\Util\Config\Field;
 
 class StrictConfigTest extends TestCase {
-
-  public function testCanDefineSettableOption() {
-    $sut = new class extends StrictConfig {
-      public function onConstruct() {
-        $this->addOption(new NonRequiredOption('name'));
-      }
+  public function testImplementsConfig() {
+    $sut = new class extends Config\StrictConfig {
+      protected function initialize() {}
     };
-
-    $sut['name'] = 'fred';
-    $this->assertEquals('fred', $sut['name']);
+    $this->assertInstanceOf(Config::class, $sut);
   }
 
-  public function testTryingToSetUndefinedOptionThrowsException() {
-    $sut = new class extends StrictConfig {};
-    $this->expectException(OptionNotDefinedException::class);
-    $sut['age'] = 50;
-  }
-
-  public function testSetValueRunsOptionValidation() {
-    $sut = $this->strictConfigWithOptions(
-        $this->alwaysInvalidOption('age')
-    );
-
-    $this->expectException(Option\InvalidOptionValueException::class);
-    $sut['age'] = 'string';
-  }
-
-  public function testIsValid() {
-    $validConfig   = $this->strictConfigWithOptions($this->alwaysValidOption());
-    $invalidConfig = $this->strictConfigWithOptions($this->alwaysInvalidOption());
-
-    $this->assertConfigValid($validConfig);
-    $this->assertConfigNotValid($invalidConfig);
-  }
-
-  public function testIsValidWithOptionSet() {
-    $sut = $this->strictConfigWithOptions($this->alwaysValidOption('age'));
-    $sut['age'] = 40;
-    $this->assertConfigValid($sut);
-  }
-
-  public function testCanGetInvalidOptionMessages() {
-    $sut = $this->strictConfigWithOptions(
-        $this->alwaysInvalidOption('a', ['Foo', 'Bar']),
-        $this->alwaysValidOption('b'),
-        $this->alwaysInvalidOption('c', ['Baz'])
-    );
-
-    $this->assertEquals(
-        [
-            'a' => ['Foo', 'Bar'],
-            'c' => ['Baz']
-        ],
-        $sut->validationMessages()
-    );
-  }
-
-  public function testGetOptionKeys() {
-    $sut = $this->strictConfigWithOptions(
-        $this->alwaysValidOption('foo'),
-        $this->alwaysValidOption('bar')
-    );
-    $this->assertSame(
-        ['foo', 'bar'],
-        $sut->getOptionKeys()
-    );
-  }
-
-  public function testAddOptions() {
-    $sut = new class extends StrictConfig {
-      protected function onConstruct() {
-        $this->addOptions(
-            new NonRequiredOption('name'),
-            new NonRequiredOption('age')
-        );
-      }
-    };
-    $this->assertSame(
-        ['name', 'age'],
-        $sut->getOptionKeys()
-    );
-  }
-
-  private function assertConfigValid(StrictConfig $config) {
+  public function testValid() {
+    $config = $this->validConfig(['name'=>'fred', 'email'=>'foo@bar.com']);
+    $config->validate(); // make sure no exception is thrown
     $this->assertTrue($config->isValid());
   }
 
-  private function assertConfigNotValid(StrictConfig $config) {
+  public function testInvalid() {
+    $config = $this->validConfig(['age'=>30]);
     $this->assertFalse($config->isValid());
   }
 
-  private function strictConfigWithOptions(Option ...$optionList) : StrictConfig {
-    $sut = new class extends StrictConfig {
-      public static function withOptions(Option ...$options) {
-        $self = new static;
-        foreach ($options as $option) $self->addOption($option);
-        return $self;
+  public function testWhenInvalidValidateThrowsException() {
+    $this->expectException(InvalidConfigStateException::class);
+    $config = $this->validConfig(['age'=>30]);
+    $config->validate();
+  }
+
+  public function testGetValidationMessagesWhenRequiredFieldNotSent() {
+    $config = $this->validConfig(['name'=>'fred', 'age'=>30]);
+    $this->assertEquals(
+        [
+            'email' => [
+                'Required'
+            ]
+        ],
+        $config->validationMessages()
+    );
+  }
+
+  public function testGetValidationMessagesWhenValidationFails() {
+    $config = $this->validConfig(['name'=>'a!', 'email'=>'foo@bar.com']);
+    $this->assertEquals(
+        [
+            'name' => [
+                'Letters only',
+                'Length must be between 3 and 20'
+            ]
+        ],
+        $config->validationMessages()
+    );
+  }
+
+  protected function validConfig($config=[]) {
+    return new class($config) extends Config\StrictConfig {
+      protected function initialize() {
+        $this->addFields(
+            $this->nameField(),
+            new Config\Field\OptionalField('age'),
+            $this->favNumField(),
+            new Field\Field('email')
+        );
+      }
+
+      private function nameField() {
+        $field = new Field\Field('name');
+        $field->addPattern('/^[a-zA-Z]+$/', 'Letters only');
+        $field->addPattern('/^.{3,20}$/', 'Length must be between 3 and 20');
+        return $field;
+      }
+
+      private function favNumField() {
+        $field = new Field\OptionalField('favnum');
+        $field->addCallable(
+            function($value){ return is_int($value) && $value >=0 && $value <= 100; },
+            'Must be between 0 and 100'
+        );
+        return $field;
       }
     };
-    return $sut::withOptions(...$optionList);
-  }
-
-
-
-  private function alwaysValidOption($name='alwaysValid') {
-    return new AlwaysValidOption($name);
-  }
-
-  private function alwaysInvalidOption($name='alwaysInvalid', $reasons=['reason']) {
-    return new AlwaysInvalidOption($name, $reasons);
   }
 }

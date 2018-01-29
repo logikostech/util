@@ -2,39 +2,26 @@
 
 namespace Logikos\Util\Tests\Config\Field;
 
-use Logikos\Util\Config\Field;
-use Logikos\Util\Config\Field\RequiredField;
+use Logikos\Util\Config\Field as FieldInterface;
+use Logikos\Util\Config\Field\Field;
+use Logikos\Util\Config\Field\Validation\Validator;
 
-class RequiredFieldTest extends TestCase {
+class FieldTest extends TestCase {
 
   public function testSetAndGetName() {
-    $field = new RequiredField('username');
+    $field = new Field('username');
     $this->assertEquals('username', $field->getName());
   }
 
   public function testImplementsField() {
     $this->assertInstanceOf(
-        Field::class,
-        new RequiredField('username')
+        FieldInterface::class,
+        new Field('username')
     );
   }
 
-  public function testIsRequired() {
-    $this->assertTrue((new RequiredField('username'))->isRequired());
-  }
-
-  public function testIsInvalidWhenNullOrEmpty() {
-    $this->assertIsNotValid(new RequiredField('username'), null, 1);
-    $this->assertIsNotValid(new RequiredField('username'), '', 1);
-  }
-
-  public function testIsValidWhenNotNullOrEmpty() {
-    $this->assertIsValid(new RequiredField('username'), 'foo');
-    $this->assertIsValid(new RequiredField('username'), 123);
-  }
-
   public function testAddValidationRegexPattern() {
-    $field = new RequiredField('username');
+    $field = new Field('username');
     $field->addPattern(
         '/^[a-z]+$/',
         'Lowercase letters only'
@@ -51,13 +38,13 @@ class RequiredFieldTest extends TestCase {
   }
 
   public function testInvalidRegexPatternThrowsException() {
-    $field = new RequiredField('username');
-    $this->expectException(Field\Validation\Validator\Exception::class);
+    $field = new Field('username');
+    $this->expectException(Validator\Exception::class);
     $field->addPattern('invalid pattern', 'desc');
   }
 
   public function testAddCallable() {
-    $field = new RequiredField('age');
+    $field = new Field('age');
     $field->addCallable(
         'is_int',
         "Value must be a real integer"
@@ -67,7 +54,7 @@ class RequiredFieldTest extends TestCase {
         "Way to old!"
     );
     $field->addCallable(
-        function($v){ return !is_int($v) || $v >= 18; },
+        function ($v) { return !is_int($v) || $v >= 18; },
         "Not old enough"
     );
     $this->assertIsValid($field, 25);
@@ -75,16 +62,39 @@ class RequiredFieldTest extends TestCase {
     $this->assertIsNotValid($field, 10, 1);
     $this->assertIsNotValid($field, 110, 1);
   }
-
   public function ageCheck($value) { return !is_int($value) || $value <= 100; }
 
 
+  public function testIsRequired() {
+    $this->assertTrue((new Field('username'))->isRequired());
+  }
+
+  public function testIsInvalidWhenNullOrEmpty() {
+    $this->assertIsNotValid(new Field('username'), null, 1);
+    $this->assertIsNotValid(new Field('username'), '', 1);
+  }
+
+  public function testIsValidWhenNotNullOrEmpty() {
+    $this->assertIsValid(new Field('username'), 'foo');
+    $this->assertIsValid(new Field('username'), 123);
+  }
+
   public function testIsNotValidWhenNullOrEmptyEvenWithOtherValidatorsSet() {
-    $field = new RequiredField('favnum');
+    $field = new Field('favnum');
     $field->addValidator($this->alwaysInvalidValidator());
 
     $this->assertIsNotValid($field, null);
     $this->assertIsNotValid($field, '');
     $this->assertIsNotValid($field, 30);
+  }
+
+  public function testWithValidators() {
+    $field = Field::withValidators(
+        'age',
+        $this->alwaysValidValidator(),
+        $this->alwaysInvalidValidator(),
+        $this->alwaysInvalidValidator()
+    );
+    $this->assertIsNotValid($field, 'foo', 2);
   }
 }

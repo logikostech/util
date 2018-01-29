@@ -7,19 +7,27 @@ use Logikos\Util\Config\Field as FieldInterface;
 use Logikos\Util\Config\Field\Validation\Result as ValidationResult;
 use Logikos\Util\Config\Field\Validation\Validator;
 
-abstract class Field implements FieldInterface {
+class Field implements FieldInterface {
 
   protected $name;
-  protected $messages = [];
+  protected $messages   = [];
 
   /** @var Validator[] */
-  protected $validators    = [];
+  protected $validators = [];
 
   public function __construct($name) {
     $this->name = $name;
   }
 
-  abstract public function isRequired() : bool;
+  public static function withValidators($name, Validator ...$validators) {
+    $field = new static($name);
+    $field->validators = $validators;
+    return $field;
+  }
+
+  public function isRequired() : bool {
+    return true;
+  }
 
   public function getName() {
     return $this->name;
@@ -38,11 +46,11 @@ abstract class Field implements FieldInterface {
   }
 
   public function validate($value): ValidationResult {
-    if ($this->isRequiredAndEmpty($value))
-      $this->addMessage('Required');
-
-    if ($this->isNotEmpty($value))
+    if ($this->isRequired() || $this->isNotEmpty($value))
       $this->runValidators($value);
+
+    if ($this->isRequiredAndEmpty($value) && count($this->messages) === 0)
+      $this->addMessage('Required');
 
     return $this->validationResult();
   }
@@ -75,9 +83,6 @@ abstract class Field implements FieldInterface {
     return !$this->isEmpty($value);
   }
 
-  /**
-   * @param $value
-   */
   protected function runValidators($value) {
     foreach ($this->validators as $validator) {
       if (!$validator->validate($value))

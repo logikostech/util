@@ -4,11 +4,11 @@ namespace Logikos\Util\Tests\Config;
 
 use Logikos\Util\Config\Field;
 use Logikos\Util\Config\InvalidConfigStateException;
-use Logikos\Util\Config\ValidConfig;
+use Logikos\Util\Config\StrictConfig;
 
 class InvalidConfigStateExceptionTest extends TestCase {
   public function testExtendsException() {
-    $config = new class extends ValidConfig {
+    $config = new class extends StrictConfig {
       protected function initialize() {}
     };
     $e = new InvalidConfigStateException($config);
@@ -32,7 +32,7 @@ class InvalidConfigStateExceptionTest extends TestCase {
   }
 
   private function fakeStrictConfig() {
-    return new class extends ValidConfig {
+    return new class extends StrictConfig {
       public function initialize() {
         $this->addFields(
             $this->alwaysInvalidField(

@@ -4,10 +4,10 @@ namespace Logikos\Util\Config;
 
 class InvalidConfigStateException extends \RuntimeException {
 
-  /** @var ValidConfig */
+  /** @var StrictConfig */
   private $config;
 
-  public function __construct(ValidConfig $config) {
+  public function __construct(StrictConfig $config) {
     $this->config = $config;
     parent::__construct($this->getMessagesAsYmlString());
   }
