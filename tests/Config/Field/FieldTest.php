@@ -96,5 +96,6 @@ class FieldTest extends TestCase {
         $this->alwaysInvalidValidator()
     );
     $this->assertIsNotValid($field, 'foo', 2);
+    $this->assertIsNotValid($field, null, 2);
   }
 }

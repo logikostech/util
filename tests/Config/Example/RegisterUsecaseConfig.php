@@ -11,7 +11,8 @@ class RegisterUsecaseConfig extends StrictConfig {
     $this->addFields(
         $this->firstNameField(),
         $this->emailField(),
-        $this->howDidYouHearAboutUsOption()
+        $this->ageField(),
+        $this->howDidYouHearAboutUsField()
     );
   }
 
@@ -19,12 +20,12 @@ class RegisterUsecaseConfig extends StrictConfig {
     return Field\Field::withValidators(
         'first_name',
         new Validator\Regex(
-            '/[a-zA-Z]/',
-            'May contain only upper and lower case letters'
+            '/^[a-zA-Z0-9_]+$/',
+            'May contain only letters, numbers, and underscore'
         ),
         new Validator\Regex(
-            '/[a-zA-Z]/',
-            'Must be between 2 and 30 characters long'
+            '/^.{3,30}$/',
+            'Length must be between 3 and 30 chars long'
         )
     );
   }
@@ -33,13 +34,25 @@ class RegisterUsecaseConfig extends StrictConfig {
     return Field\Field::withValidators(
         'email',
         new Validator\Callback(
-            function ($email) { return filter_var($email, FILTER_VALIDATE_EMAIL) !== false; },
-            'Invalid email address'
+            function ($email) {
+              return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+            },
+            'Must be a valid email address'
         )
     );
   }
 
-  private function howDidYouHearAboutUsOption() {
+  private function ageField() {
+    return Field\OptionalField::withValidators(
+        'age',
+        new Validator\Callback(
+            'is_int',
+            'Must be a valid integer'
+        )
+    );
+  }
+
+  private function howDidYouHearAboutUsField() {
     return new Field\OptionalField('referrer');
   }
 }

@@ -22,4 +22,15 @@ class OptionalFieldTest extends TestCase {
     $this->assertIsValid($field, '');
     $this->assertIsNotValid($field, 30);
   }
+
+  public function testWithValidators() {
+    $field = OptionalField::withValidators(
+        'age',
+        $this->alwaysValidValidator(),
+        $this->alwaysInvalidValidator(),
+        $this->alwaysInvalidValidator()
+    );
+    $this->assertIsNotValid($field, 'foo', 2);
+    $this->assertIsValid($field, null);
+  }
 }
