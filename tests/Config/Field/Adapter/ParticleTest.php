@@ -8,9 +8,16 @@ use Logikos\Util\Tests\Config\Field\TestCase;
 use Particle\Validator as ParticleValidator;
 
 class ParticleTest extends TestCase {
+
   public function testRequiredField() {
     $field = Particle::required("first_name");
     $this->assertInstanceOf(Field::class, $field);
+  }
+
+  public function testGetName() {
+    $name = "first_name";
+    $field = Particle::required($name);
+    $this->assertEquals($name, $field->getName());
   }
 
   public function testChainIsAccessable() {
@@ -34,5 +41,11 @@ class ParticleTest extends TestCase {
     $this->assertIsNotValid($field, 'ab', 1);
     $this->assertIsNotValid($field, 'abc123', 1);
     $this->assertIsNotValid($field, 'a0', 2);
+  }
+
+
+  public function testOptionalField() {
+    $field = Particle::optional("age");
+    $this->assertInstanceOf(Field::class, $field);
   }
 }

@@ -28,6 +28,11 @@ class Particle implements Field {
     return new self($name, $v, $v->required($name));
   }
 
+  public static function optional($name) : Particle {
+    $v = new Particle\Validator();;
+    return new self($name, $v, $v->optional($name));
+  }
+
   public function getName() {
     return $this->name;
   }
