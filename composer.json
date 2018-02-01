@@ -19,7 +19,11 @@
   },
   "autoload": {
     "psr-4": {
-      "Logikos\\Util\\": "src/",
+      "Logikos\\Util\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Logikos\\Util\\Tests\\": "tests/"
     }
   },

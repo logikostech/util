@@ -6,7 +6,17 @@ use Logikos\Util\Config\Field;
 use Logikos\Util\Config\Field\Validation\Validator;
 use Logikos\Util\Config\StrictConfig;
 
-class RegisterUsecaseConfig extends StrictConfig {
+/**
+ * Class RegisterUsecaseConfig
+ * @package Logikos\Util\Tests\Config\Example
+ *
+ * @property $first_name
+ * @property $email
+ * @property $age
+ * @property $referrer
+ *
+ */
+class UserData extends StrictConfig {
   public function initialize() {
     $this->addFields(
         $this->firstNameField(),
@@ -49,6 +59,12 @@ class RegisterUsecaseConfig extends StrictConfig {
             'is_int',
             'Must be a valid integer'
         )
+    );
+  }
+
+  private function birthdayField() {
+    return Field\OptionalField::withValidators(
+        new Validator\IsInstanceOf()
     );
   }
 
