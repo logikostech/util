@@ -16,6 +16,8 @@ class Field implements FieldInterface {
   protected $validators = [];
 
   public function __construct($name) {
+    if (!$this->isValidName($name))
+      throw new InvalidFieldNameException();
     $this->name = $name;
   }
 
@@ -88,5 +90,11 @@ class Field implements FieldInterface {
       if (!$validator->validate($value))
         $this->addMessage($validator->getDescription());
     }
+  }
+
+  private function isValidName($name) {
+    return is_int($name)
+        || is_string($name)
+        && !empty($name);
   }
 }

@@ -2,6 +2,7 @@
 
 namespace Logikos\Util\Tests\Config\Field;
 
+use Logikos\Util\Config\ConfigException;
 use Logikos\Util\Config\Field as FieldInterface;
 use Logikos\Util\Config\Field\Field;
 use Logikos\Util\Config\Field\Validation\Validator;
@@ -97,5 +98,20 @@ class FieldTest extends TestCase {
     );
     $this->assertIsNotValid($field, 'foo', 2);
     $this->assertIsNotValid($field, null, 2);
+  }
+
+  public function testInvalidOptionNamesFail() {
+    $this->assertInvalidFieldName(null);
+    $this->assertInvalidFieldName(true);
+    $this->assertInvalidFieldName('');
+    $this->assertInvalidFieldName(['foo' =>'bar']);
+    $this->assertInvalidFieldName((object) ['foo' =>'bar']);
+  }
+
+  private function assertInvalidFieldName($name) {
+    $this->assertExceptionWillThrow(
+        ConfigException::class,
+        function() use ($name) { new Field($name); }
+    );
   }
 }
