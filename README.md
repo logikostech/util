@@ -37,7 +37,8 @@ git clone https://github.com/logikostech/util.git
 - [Abstract Config] - base config object largely inspired by Phalcon\Config
   - [Mutable Config] - adds `set($key, $value)` and `merge(Config $config)`
   - [Immutable Config] - adds `with($key, $value)` and throws `OutOfBoundsException` on assignment after construction
-  
+  - [Strict Config] - type safe config with validation.
+    
 [Config]: src/Config.php
 [MutableConfig]: src/Config/MutableConfig.php
 [ImmutableConfig]: src/Config/ImmutableConfig.php
@@ -45,3 +46,4 @@ git clone https://github.com/logikostech/util.git
 [Abstract Config]: docs/config/README.md
 [Mutable Config]: docs/config/mutable.md
 [Immutable Config]: docs/config/immutable.md
+[Strict Config]: docs/config/strict.md
