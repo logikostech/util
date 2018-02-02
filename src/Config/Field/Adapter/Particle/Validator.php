@@ -9,20 +9,24 @@ class Validator extends Particle\Validator {
    * @param string $key
    * @param null   $name
    * @param bool   $allowEmpty
-   * @return Chain|Particle\Chain
+   * @return Chain
    */
   public function required($key, $name = null, $allowEmpty = false) {
-    return parent::required($key, $name, $allowEmpty);
+    /** @var Chain $chain */
+    $chain = parent::required($key, $name, $allowEmpty);
+    return $chain;
   }
 
   /**
    * @param string $key
    * @param null   $name
    * @param bool   $allowEmpty
-   * @return Chain|Particle\Chain
+   * @return Chain
    */
   public function optional($key, $name = null, $allowEmpty = true) {
-    return parent::optional($key, $name, $allowEmpty);
+    /** @var Chain $chain */
+    $chain = parent::optional($key, $name, $allowEmpty);
+    return $chain;
   }
 
   protected function buildChain($key, $name, $required, $allowEmpty) {
