@@ -20,15 +20,30 @@ class Pair {
   }
 
   private function getScalar($key) {
-    if (is_null($key))
-      throw new InvalidTypeException('Can not use null for a key');
-
-    if (is_object($key) && !method_exists($key, '__toString'))
-      throw new InvalidTypeException('Object keys must implement __toString');
+    $this->validateNotNull($key);
+    $this->validateNotObjectOrHasToString($key);
 
     if (is_numeric($key) || is_string($key))
       return $key;
 
     return (string) $key;
+  }
+
+  /**
+   * @param $key
+   * @throws InvalidTypeException
+   */
+  private function validateNotNull($key) {
+    if (is_null($key))
+      throw new InvalidTypeException('Can not use null for a key');
+  }
+
+  /**
+   * @param $key
+   * @throws InvalidTypeException
+   */
+  private function validateNotObjectOrHasToString($key) {
+    if (is_object($key) && !method_exists($key, '__toString'))
+      throw new InvalidTypeException('Object keys must implement __toString');
   }
 }
