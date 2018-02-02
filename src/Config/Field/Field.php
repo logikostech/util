@@ -2,7 +2,6 @@
 
 namespace Logikos\Util\Config\Field;
 
-use Innmind\Immutable\Stream;
 use Logikos\Util\Config\Field as FieldInterface;
 use Logikos\Util\Config\Field\Validation\Result as ValidationResult;
 use Logikos\Util\Config\Field\Validation\Validator;
@@ -48,7 +47,7 @@ class Field implements FieldInterface {
   }
 
   public function validate($value): ValidationResult {
-    if ($this->isRequired() || $this->isNotEmpty($value))
+    if ($this->isRequiredOrNotEmpty($value))
       $this->runValidators($value);
 
     if ($this->isRequiredAndEmpty($value) && count($this->messages) === 0)
@@ -59,6 +58,10 @@ class Field implements FieldInterface {
 
   protected function isRequiredAndEmpty($value) {
     return $this->isRequired() && $this->isEmpty($value);
+  }
+
+  protected function isRequiredOrNotEmpty($value) {
+    return $this->isRequired() || $this->isNotEmpty($value);
   }
 
   protected function addMessage($message) {
