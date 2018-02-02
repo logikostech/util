@@ -7,21 +7,21 @@ use Logikos\Util\Config\Field\Validation\Validator;
 use Logikos\Util\Config\StrictConfig;
 
 /**
- * Class RegisterUsecaseConfig
- * @package Logikos\Util\Tests\Config\Example
- *
- * @property $first_name
- * @property $email
- * @property $age
- * @property $referrer
- *
+ * @property string    $first_name
+ * @property string    $email
+ * @property \DateTime $reg_date
+ * @property integer   $age
+ * @property \DateTime $birthday
+ * @property string    $referrer
  */
 class UserData extends StrictConfig {
   public function initialize() {
     $this->addFields(
         $this->firstNameField(),
         $this->emailField(),
+        $this->registrationDateField(),
         $this->ageField(),
+        $this->birthdayField(),
         $this->howDidYouHearAboutUsField()
     );
   }
@@ -52,6 +52,12 @@ class UserData extends StrictConfig {
     );
   }
 
+  private function registrationDateField() {
+    $field = Field\Adapter\Particle::required('reg_date');
+    $field->chain()->datetime('Y-m-d');
+    return $field;
+  }
+
   private function ageField() {
     return Field\OptionalField::withValidators(
         'age',
@@ -64,7 +70,8 @@ class UserData extends StrictConfig {
 
   private function birthdayField() {
     return Field\OptionalField::withValidators(
-        new Validator\IsInstanceOf()
+        'birthday',
+        new Validator\IsInstanceOf(\DateTime::class)
     );
   }
 
