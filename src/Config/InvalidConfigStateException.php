@@ -2,7 +2,7 @@
 
 namespace Logikos\Util\Config;
 
-class InvalidConfigStateException extends \RuntimeException {
+class InvalidConfigStateException extends ConfigException {
 
   /** @var StrictConfig */
   private $config;

@@ -2,5 +2,7 @@
 
 namespace Logikos\Util\Config\Field;
 
-class InvalidRegexPatternException extends \RuntimeException {
+use Logikos\Util\Config\ConfigException;
+
+class InvalidRegexPatternException extends ConfigException {
 }
