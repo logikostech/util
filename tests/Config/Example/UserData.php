@@ -9,7 +9,7 @@ use Logikos\Util\Config\StrictConfig;
 /**
  * @property string    $first_name
  * @property string    $email
- * @property \DateTime $reg_date
+ * @property string    $reg_date
  * @property integer   $age
  * @property \DateTime $birthday
  * @property string    $referrer
