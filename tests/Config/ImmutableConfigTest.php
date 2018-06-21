@@ -19,6 +19,18 @@ class ImmutableConfigTest extends TestCase {
     $this->assertTrue($conf->isLocked());
   }
 
+  public function testSubConfigType() {
+    $conf = new Config([
+        'name' => 'fred',
+        'address' => [
+            'street'=>'1234 N Main st',
+            'city'=>'abcville'
+        ]
+    ]);
+    $this->assertInstanceOf(Config::class, $conf->address);
+    $this->assertTrue(get_class($conf->address) === Config::class);
+  }
+
   # Set
   public function testCanNotAssignAsArray() {
     $this->expectException(CanNotMutateException::class);

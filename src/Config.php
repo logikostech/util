@@ -69,10 +69,16 @@ abstract class Config extends Registry {
    */
   public function offsetSet($offset, $value) {
     $this->blockIfLocked();
-    parent::offsetSet(
-        $offset,
-        is_array($value) ? new static($value) : $value
-    );
+    parent::offsetSet($offset, $this->settableValue($value));
+  }
+
+  protected function settableValue($value) {
+    if (is_array($value)) return $this->subConfig($value);
+    return $value;
+  }
+
+  protected function subConfig($arrayConfig = []) {
+    return new class($arrayConfig) extends Config {};
   }
 
   /**
