@@ -19,10 +19,19 @@ abstract class Config extends Registry {
    */
   public function __construct(array $arrayConfig = []) {
     parent::__construct();
-    foreach($arrayConfig as $key => $value)
-      $this->offsetSet($key, $value);
 
+    $this->import($this->defaults());
+    $this->import($arrayConfig);
     $this->onConstruct();
+  }
+
+  public function import(array $data) {
+    foreach ($data as $key=>$value) $this->offsetSet($key, $value);
+  }
+
+  // override this to have a base config
+  protected function defaults(): array {
+    return [];
   }
 
   // override this if you want to
