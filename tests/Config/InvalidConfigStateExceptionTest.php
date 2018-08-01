@@ -5,6 +5,7 @@ namespace Logikos\Util\Tests\Config;
 use Logikos\Util\Config\Field;
 use Logikos\Util\Config\InvalidConfigStateException;
 use Logikos\Util\Config\StrictConfig;
+use Logikos\Util\Validation;
 
 class InvalidConfigStateExceptionTest extends TestCase {
   public function testExtendsException() {
@@ -59,8 +60,8 @@ class InvalidConfigStateExceptionTest extends TestCase {
           }
           public function getName()              { return $this->name;    }
 
-          public function validate($value): Field\Validation\Result {
-            return new Field\Validation\InvalidResult($this->reasons);
+          public function validate($value): Validation\Result {
+            return new Validation\InvalidResult($this->reasons);
           }
         };
       }

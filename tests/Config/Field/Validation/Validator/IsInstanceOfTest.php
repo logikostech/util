@@ -2,7 +2,7 @@
 
 namespace Logikos\Util\Tests\Config\Field\Validation\Validator;
 
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class IsInstanceOfTest extends TestCase {
   public function testInstantiate() {

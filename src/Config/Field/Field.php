@@ -3,15 +3,14 @@
 namespace Logikos\Util\Config\Field;
 
 use Logikos\Util\Config\Field as FieldInterface;
-use Logikos\Util\Config\Field\Validation\Result as ValidationResult;
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation;
 
 class Field implements FieldInterface {
 
   protected $name;
   protected $messages   = [];
 
-  /** @var Validator[] */
+  /** @var Validation\Validator[] */
   protected $validators = [];
 
   public function __construct($name) {
@@ -20,7 +19,7 @@ class Field implements FieldInterface {
     $this->name = $name;
   }
 
-  public static function withValidators($name, Validator ...$validators) {
+  public static function withValidators($name, Validation\Validator ...$validators) {
     $field = new static($name);
     $field->validators = $validators;
     return $field;
@@ -35,18 +34,18 @@ class Field implements FieldInterface {
   }
 
   public function addPattern($pattern, $description) {
-    $this->addValidator(new Validator\Regex($pattern, $description));
+    $this->addValidator(new Validation\Validator\Regex($pattern, $description));
   }
 
   public function addCallable(callable $callable, $description) {
-    $this->addValidator(new Validator\Callback($callable, $description));
+    $this->addValidator(new Validation\Validator\Callback($callable, $description));
   }
 
-  public function addValidator(Validator $validator) {
+  public function addValidator(Validation\Validator $validator) {
     array_push($this->validators, $validator);
   }
 
-  public function validate($value): ValidationResult {
+  public function validate($value): Validation\Result {
     if ($this->isRequiredOrNotEmpty($value))
       $this->runValidators($value);
 

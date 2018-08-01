@@ -5,7 +5,7 @@ namespace Logikos\Util\Tests\Config\Field;
 use Logikos\Util\Config\ConfigException;
 use Logikos\Util\Config\Field as FieldInterface;
 use Logikos\Util\Config\Field\Field;
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class FieldTest extends TestCase {
 

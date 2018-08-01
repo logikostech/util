@@ -3,7 +3,7 @@
 namespace Logikos\Util\Config\Field\Validation\Validator;
 
 
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class Callback implements Validator {
   /**

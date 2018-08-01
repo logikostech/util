@@ -2,7 +2,7 @@
 
 namespace Logikos\Util\Tests\Config\Field\Validation\Validator;
 
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class RegexTest extends TestCase {
 

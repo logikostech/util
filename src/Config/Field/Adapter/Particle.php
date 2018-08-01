@@ -3,6 +3,7 @@
 namespace Logikos\Util\Config\Field\Adapter;
 
 use Logikos\Util\Config\Field;
+use Logikos\Util\Validation;
 use Particle\Validator\ValidationResult;
 
 
@@ -37,7 +38,7 @@ class Particle implements Field {
     return $this->name;
   }
 
-  public function validate($value): Field\Validation\Result {
+  public function validate($value): Validation\Result {
     $particleResult = $this->validator->validate([
         $this->name => $value
     ]);
@@ -52,7 +53,7 @@ class Particle implements Field {
     foreach ($particleResult->getFailures() as $failure) {
       array_push($messages, $failure->format());
     }
-    return new Field\Validation\InvalidResult($messages);
+    return new Validation\InvalidResult($messages);
   }
 
   public function chain() {

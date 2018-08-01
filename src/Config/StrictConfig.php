@@ -3,6 +3,7 @@
 namespace Logikos\Util\Config;
 
 use Logikos\Util\Config;
+use Logikos\Util\Validation;
 
 abstract class StrictConfig extends Config {
 
@@ -51,9 +52,9 @@ abstract class StrictConfig extends Config {
 
   /**
    * @param Field $field
-   * @return Field\Validation\Result
+   * @return Validation\Result
    */
-  protected function fieldValidationResult(Field $field): Field\Validation\Result {
+  protected function fieldValidationResult(Field $field): Validation\Result {
     return $field->validate($this->get($field->getName()));
   }
 

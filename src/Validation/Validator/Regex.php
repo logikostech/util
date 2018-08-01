@@ -2,7 +2,7 @@
 
 namespace Logikos\Util\Config\Field\Validation\Validator;
 
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class Regex implements Validator {
   private $pattern;
