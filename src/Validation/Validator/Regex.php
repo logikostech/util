@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Config\Field\Validation\Validator;
+namespace Logikos\Util\Validation\Validator;
 
 use Logikos\Util\Validation\Validator;
 

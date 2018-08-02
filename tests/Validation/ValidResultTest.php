@@ -2,8 +2,8 @@
 
 namespace Logikos\Util\Tests\Config\Field\Validation;
 
-use Logikos\Util\Config\Field\Validation\ValidResult;
-use Logikos\Util\Config\Field\Validation\Result as ValidationResult;
+use Logikos\Util\Validation\ValidResult;
+use Logikos\Util\Validation\Result as ValidationResult;
 use Logikos\Util\Tests\Config\TestCase;
 
 class ValidResultTest extends TestCase {
