@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Config;
+namespace LogikosTest\Util\Config;
 
 use Logikos\Util\Config\Field;
 use Logikos\Util\Config\InvalidConfigStateException;

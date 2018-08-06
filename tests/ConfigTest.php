@@ -1,9 +1,9 @@
 <?php
 
-namespace Logikos\Util\Tests;
+namespace LogikosTest\Util;
 
 use Logikos\Util\Config;
-use Logikos\Util\Tests\Config\TestCase;
+use LogikosTest\Util\Config\TestCase;
 
 class ConfigTest  extends TestCase {
 

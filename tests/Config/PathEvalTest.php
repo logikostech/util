@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Config;
+namespace LogikosTest\Util\Config;
 
 use Logikos\Util\Config\MutableConfig;
 use Logikos\Util\Config\PathEval;

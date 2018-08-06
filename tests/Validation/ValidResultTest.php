@@ -1,10 +1,10 @@
 <?php
 
-namespace Logikos\Util\Tests\Validation;
+namespace LogikosTest\Util\Validation;
 
 use Logikos\Util\Validation\ValidResult;
 use Logikos\Util\Validation\Result as ValidationResult;
-use Logikos\Util\Tests\Config\TestCase;
+use LogikosTest\Util\Config\TestCase;
 
 class ValidResultTest extends TestCase {
 

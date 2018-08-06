@@ -1,8 +1,8 @@
 <?php
 
-namespace Logikos\Util\Tests\Validation\Validator;
+namespace LogikosTest\Util\Validation\Validator;
 
-use Logikos\Util\Tests\Config\TestCase as ConfigTestCase;
+use LogikosTest\Util\Config\TestCase as ConfigTestCase;
 use Logikos\Util\Validation\Validator;
 
 class TestCase extends ConfigTestCase {

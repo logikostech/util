@@ -1,10 +1,10 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Field;
+namespace LogikosTest\Util\Config\Field;
 
 use Logikos\Util\Config\Field;
 use Logikos\Util\Validation\Validator;
-use Logikos\Util\Tests\Config\TestCase as ConfigTestCase;
+use LogikosTest\Util\Config\TestCase as ConfigTestCase;
 
 class TestCase extends ConfigTestCase {
 

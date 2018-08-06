@@ -1,10 +1,10 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Field\Adapter;
+namespace LogikosTest\Util\Config\Field\Adapter;
 
 use Logikos\Util\Config\Field;
 use Logikos\Util\Config\Field\Adapter\Particle;
-use Logikos\Util\Tests\Config\Field\TestCase;
+use LogikosTest\Util\Config\Field\TestCase;
 use Particle\Validator as ParticleValidator;
 
 class ParticleTest extends TestCase {

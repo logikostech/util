@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Validation\Validator;
+namespace LogikosTest\Util\Validation\Validator;
 
 use Logikos\Util\Validation\Validator\Callback;
 

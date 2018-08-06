@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Example;
+namespace LogikosTest\Util\Config\Example;
 
 use Logikos\Util\Config\Field;
 use Logikos\Util\Validation\Validator;

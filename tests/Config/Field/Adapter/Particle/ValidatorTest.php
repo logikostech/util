@@ -1,10 +1,10 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Field\Adapter\Particle;
+namespace LogikosTest\Util\Config\Field\Adapter\Particle;
 
 use Logikos\Util\Config\Field\Adapter\Particle\Chain;
 use Logikos\Util\Config\Field\Adapter\Particle\Validator;
-use Logikos\Util\Tests\Config\TestCase;
+use LogikosTest\Util\Config\TestCase;
 
 class ValidatorTest extends TestCase {
   public function testRequireReturnsLogikosChain() {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests;
+namespace LogikosTest\Util;
 
 class TestCase extends \PHPUnit\Framework\TestCase {
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Logikos\Util\Tests\Validation;
+namespace LogikosTest\Util\Validation;
 
 use Logikos\Util\Validation;
-use Logikos\Util\Tests\Config\TestCase;
+use LogikosTest\Util\Config\TestCase;
 
 class InvalidResultTest extends TestCase {
 
