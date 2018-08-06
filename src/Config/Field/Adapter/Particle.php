@@ -43,7 +43,7 @@ class Particle implements Field {
         $this->name => $value
     ]);
     if ($particleResult->isValid())
-      return new Field\Validation\ValidResult();
+      return new Validation\ValidResult();
 
     return $this->invalidResult($particleResult);
   }
