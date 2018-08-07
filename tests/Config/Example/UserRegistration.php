@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Example;
+namespace LogikosTest\Util\Config\Example;
 
 class UserRegistration {
   public function register(UserData $config) {

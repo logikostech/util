@@ -1,8 +1,8 @@
 <?php
 
-namespace Logikos\Util\Config\Field\Validation\Validator;
+namespace Logikos\Util\Validation\Validator;
 
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class IsInstanceOf implements Validator {
   private $fqcn;

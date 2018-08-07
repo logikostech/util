@@ -23,7 +23,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Logikos\\Util\\Tests\\": "tests/"
+      "LogikosTest\\Util\\": "tests/"
     }
   },
   "scripts": {

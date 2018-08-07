@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Field;
+namespace LogikosTest\Util\Config\Field;
 
 
 use Logikos\Util\Config\Field\OptionalField;
