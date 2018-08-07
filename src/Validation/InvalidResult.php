@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Config\Field\Validation;
+namespace Logikos\Util\Validation;
 
 class InvalidResult implements Result {
 

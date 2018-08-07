@@ -10,6 +10,10 @@ class MutableConfig extends Config {
     $this->offsetSet($offset, $value);
   }
 
+  protected function subConfig($arrayConfig = []) {
+    return new self($arrayConfig);
+  }
+
   # Merge
   public function merge($b) {
     foreach ($b as $key=>$value) {

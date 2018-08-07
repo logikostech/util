@@ -10,6 +10,10 @@ class ImmutableConfig extends Config {
     $this->lock();
   }
 
+  protected function subConfig($arrayConfig = []) {
+    return new self($arrayConfig);
+  }
+
   public function with($key, $value) {
     $values = $this->rawValues();
     $values[$key] = $value;

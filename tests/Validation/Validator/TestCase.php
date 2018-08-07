@@ -1,9 +1,9 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Field\Validation\Validator;
+namespace LogikosTest\Util\Validation\Validator;
 
-use Logikos\Util\Tests\Config\TestCase as ConfigTestCase;
-use Logikos\Util\Config\Field\Validation\Validator;
+use LogikosTest\Util\Config\TestCase as ConfigTestCase;
+use Logikos\Util\Validation\Validator;
 
 class TestCase extends ConfigTestCase {
   protected function assertIsValid(Validator $validator, $value, $message = null) {

@@ -19,10 +19,19 @@ abstract class Config extends Registry {
    */
   public function __construct(array $arrayConfig = []) {
     parent::__construct();
-    foreach($arrayConfig as $key => $value)
-      $this->offsetSet($key, $value);
 
+    $this->import($this->defaults());
+    $this->import($arrayConfig);
     $this->onConstruct();
+  }
+
+  public function import(array $data) {
+    foreach ($data as $key=>$value) $this->offsetSet($key, $value);
+  }
+
+  // override this to have a base config
+  protected function defaults(): array {
+    return [];
   }
 
   // override this if you want to
@@ -69,10 +78,16 @@ abstract class Config extends Registry {
    */
   public function offsetSet($offset, $value) {
     $this->blockIfLocked();
-    parent::offsetSet(
-        $offset,
-        is_array($value) ? new static($value) : $value
-    );
+    parent::offsetSet($offset, $this->settableValue($value));
+  }
+
+  protected function settableValue($value) {
+    if (is_array($value)) return $this->subConfig($value);
+    return $value;
+  }
+
+  protected function subConfig($arrayConfig = []) {
+    return new class($arrayConfig) extends Config {};
   }
 
   /**

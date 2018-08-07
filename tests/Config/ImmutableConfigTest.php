@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Tests\Config;
+namespace LogikosTest\Util\Config;
 
 use Logikos\Util\CanNotMutateException;
 use Logikos\Util\Config as AbstractConfig;
@@ -17,6 +17,18 @@ class ImmutableConfigTest extends TestCase {
   public function testIsLocked() {
     $conf = new Config(['a' => 'foo']);
     $this->assertTrue($conf->isLocked());
+  }
+
+  public function testSubConfigType() {
+    $conf = new Config([
+        'name' => 'fred',
+        'address' => [
+            'street'=>'1234 N Main st',
+            'city'=>'abcville'
+        ]
+    ]);
+    $this->assertInstanceOf(Config::class, $conf->address);
+    $this->assertTrue(get_class($conf->address) === Config::class);
   }
 
   # Set

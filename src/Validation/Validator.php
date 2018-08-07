@@ -1,6 +1,6 @@
 <?php
 
-namespace Logikos\Util\Config\Field\Validation;
+namespace Logikos\Util\Validation;
 
 interface Validator {
   public function validate($value) : bool;

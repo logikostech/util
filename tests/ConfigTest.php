@@ -1,9 +1,9 @@
 <?php
 
-namespace Logikos\Util\Tests;
+namespace LogikosTest\Util;
 
 use Logikos\Util\Config;
-use Logikos\Util\Tests\Config\TestCase;
+use LogikosTest\Util\Config\TestCase;
 
 class ConfigTest  extends TestCase {
 
@@ -237,8 +237,48 @@ class ConfigTest  extends TestCase {
     $this->assertTrue($conf->isLocked());
   }
 
-  # helpers
+  public function testExtendWithDefaults() {
+    $data = [
+        'secondSetting' => 'on',
+        'thirdSetting' => 'foobar'
+    ];
+    $c = new class($data) extends Config {
+      protected function defaults(): array {
+       return [
+            'firstSetting' => 'on',
+            'secondSetting' => 'off'
+        ];
+      }
+    };
+    $c['secondSetting'] = 'on';
+    $this->assertSame('on', $c['firstSetting']);
+    $this->assertSame('on', $c->firstSetting);
+    $this->assertSame('on', $c->get('firstSetting'));
+    $this->assertSame('on', $c->get('secondSetting'));
+    $this->assertSame('foobar', $c->get('thirdSetting'));
+  }
 
+  public function testDefaultsWhenLocked() {
+    $data = ['b'=>'b'];
+    $c = new class($data) extends Config {
+      protected function onConstruct() {
+        $this->lock();
+        parent::onConstruct();
+      }
+
+      protected function defaults(): array {
+        return [
+            'a' => 'A',
+            'b' => 'B'
+        ];
+      }
+    };
+    $this->assertSame('A', $c->a);
+    $this->assertSame('b', $c->b);
+  }
+
+
+  # helpers
   /**
    * @param array $data
    * @return Config|\PHPUnit_Framework_MockObject_MockObject

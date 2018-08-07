@@ -1,8 +1,8 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Example;
+namespace LogikosTest\Util\Config\Example;
 
-use Logikos\Util\Tests\Config\TestCase;
+use LogikosTest\Util\Config\TestCase;
 use DateTime;
 
 class UserDataTest extends TestCase {
