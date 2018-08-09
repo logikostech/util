@@ -1,8 +1,8 @@
 <?php
 
-namespace Logikos\Util\Tests\Config\Field\Validation\Validator;
+namespace LogikosTest\Util\Validation\Validator;
 
-use Logikos\Util\Config\Field\Validation\Validator;
+use Logikos\Util\Validation\Validator;
 
 class IsIterableTest extends TestCase {
   public function testSetAndGetDescription() {
