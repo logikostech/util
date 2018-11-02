@@ -38,9 +38,17 @@ class Registry implements \ArrayAccess, \Countable, \Iterator {
     return count($this->values);
   }
 
+  /**
+   * @param $offset
+   * @return bool
+   */
+  public function isset($offset) {
+    return isset($this->values[$offset]);
+  }
+
   # ArrayAccess
   public function offsetGet($offset)       { return $this->requireOffset($offset); }
-  public function offsetExists($offset)    { return isset($this->values[$offset]); }
+  public function offsetExists($offset)    { return array_key_exists($offset, $this->values); }
   public function offsetSet($offset, $val) { $this->values[$offset] = $val;        }
   public function offsetUnset($offset)     { unset($this->values[$offset]);        }
 

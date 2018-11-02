@@ -9,10 +9,16 @@ class RegistryTest extends TestCase {
     $reg = new Registry();
     $reg->a = 'foo';
     $reg['b'] = 'bar';
+
     $this->assertTrue(isset($reg->a));
     $this->assertTrue(isset($reg['b']));
+
     $this->assertFalse(isset($reg->c));
     $this->assertFalse(isset($reg['c']));
+
+    $this->assertTrue($reg->isset('a'));
+    $this->assertTrue($reg->isset('b'));
+    $this->assertFalse($reg->isset('c'));
   }
 
   public function testSetGet() {
@@ -68,4 +74,12 @@ class RegistryTest extends TestCase {
         $sut->exposedRawValues()
     );
   }
+
+  public function testOffsetExistsWhenSetToNull() {
+    $r = new Registry();
+    $this->assertFalse($r->offsetExists('a'));
+    $r->offsetSet('a', null);
+    $this->assertTrue($r->offsetExists('a'));
+  }
+
 }
