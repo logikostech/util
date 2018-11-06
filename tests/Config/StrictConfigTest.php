@@ -62,7 +62,7 @@ class StrictConfigTest extends TestCase {
       protected function initialize() {
         $this->addFields(
             $this->nameField(),
-            new Config\Field\OptionalField('age'),
+            new Field\OptionalField('age'),
             $this->favNumField(),
             new Field\Field('email')
         );
