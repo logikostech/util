@@ -4,6 +4,8 @@ namespace Logikos\Util\Config\Field;
 
 use Logikos\Util\Config\Field as FieldInterface;
 use Logikos\Util\Validation;
+use Logikos\Util\Validation\Validator;
+use Logikos\Util\Validation\Result;
 
 class Field implements FieldInterface {
 
@@ -20,9 +22,9 @@ class Field implements FieldInterface {
     $this->validation = new Validation();
   }
 
-  public static function withValidators($name, Validation\Validator ...$validators) {
+  public static function withValidators($name, Validator ...$validators) {
     $field = new static($name);
-    $field->validation->addValidators(...$validators);
+    $field->validation->addValidator(...$validators);
     return $field;
   }
 
@@ -34,13 +36,13 @@ class Field implements FieldInterface {
     return $this->name;
   }
 
-  public function validate($value): Validation\Result {
+  public function validate($value): Result {
     return $this->isRequired()
         ? $this->validateRequired($value)
         : $this->validateOptional($value);
   }
 
-  protected function validateRequired($value): Validation\Result {
+  protected function validateRequired($value): Result {
     $result = $this->validationResult($value);
 
     return $result->isValid() && $this->isEmpty($value)
@@ -48,13 +50,13 @@ class Field implements FieldInterface {
         : $result;
   }
 
-  protected function validateOptional($value): Validation\Result {
+  protected function validateOptional($value): Result {
     return $this->isEmpty($value)
         ? new Validation\ValidResult()
         : $this->validationResult($value);
   }
 
-  protected function validationResult($value): Validation\Result {
+  protected function validationResult($value): Result {
     return $this->validation->validate($value);
   }
 
@@ -62,16 +64,16 @@ class Field implements FieldInterface {
     return new Validation\InvalidResult($messages);
   }
 
-  public function addValidator(Validation\Validator $validator) {
-    $this->validation->addValidator($validator);
+  public function addValidator(Validator ...$validator) {
+    $this->validation->addValidator(...$validator);
   }
 
   public function addPattern($pattern, $description) {
-    $this->addValidator(new Validation\Validator\Regex($pattern, $description));
+    $this->addValidator(new Validator\Regex($pattern, $description));
   }
 
   public function addCallable(callable $callable, $description) {
-    $this->addValidator(new Validation\Validator\Callback($callable, $description));
+    $this->addValidator(new Validator\Callback($callable, $description));
   }
 
   protected function isEmpty($value) {

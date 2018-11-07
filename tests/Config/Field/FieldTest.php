@@ -100,6 +100,15 @@ class FieldTest extends TestCase {
     $this->assertIsNotValid($field, null, 2);
   }
 
+  public function testAddMultipleValidatorsAtOnce() {
+    $field = new Field('foo');
+    $field->addValidator(
+        $this->alwaysValidValidator(),
+        $this->alwaysInvalidValidator()
+    );
+    $this->assertIsNotValid($field, 'foo');
+  }
+
   public function testInvalidOptionNamesFail() {
     $this->assertInvalidFieldName(null);
     $this->assertInvalidFieldName(true);
