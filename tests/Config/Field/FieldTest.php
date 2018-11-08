@@ -32,10 +32,10 @@ class FieldTest extends TestCase {
         'Length must be between 3 and 30 chars long'
     );
 
-    $this->assertIsValid($field, 'abcde');
-    $this->assertIsNotValid($field, 'abc123', 1);
-    $this->assertIsNotValid($field, 'aa', 1);
-    $this->assertIsNotValid($field, 'a1', 2);
+    $this->assertFieldIsValid($field, 'abcde');
+    $this->assertFieldIsNotValid($field, 'abc123', 1);
+    $this->assertFieldIsNotValid($field, 'aa', 1);
+    $this->assertFieldIsNotValid($field, 'a1', 2);
   }
 
   public function testInvalidRegexPatternThrowsException() {
@@ -58,10 +58,10 @@ class FieldTest extends TestCase {
         function ($v) { return !is_int($v) || $v >= 18; },
         "Not old enough"
     );
-    $this->assertIsValid($field, 25);
-    $this->assertIsNotValid($field, 'abc', 1);
-    $this->assertIsNotValid($field, 10, 1);
-    $this->assertIsNotValid($field, 110, 1);
+    $this->assertFieldIsValid($field, 25);
+    $this->assertFieldIsNotValid($field, 'abc', 1);
+    $this->assertFieldIsNotValid($field, 10, 1);
+    $this->assertFieldIsNotValid($field, 110, 1);
   }
   public function ageCheck($value) { return !is_int($value) || $value <= 100; }
 
@@ -71,22 +71,22 @@ class FieldTest extends TestCase {
   }
 
   public function testIsInvalidWhenNullOrEmpty() {
-    $this->assertIsNotValid(new Field('username'), null, 1);
-    $this->assertIsNotValid(new Field('username'), '', 1);
+    $this->assertFieldIsNotValid(new Field('username'), null, 1);
+    $this->assertFieldIsNotValid(new Field('username'), '', 1);
   }
 
   public function testIsValidWhenNotNullOrEmpty() {
-    $this->assertIsValid(new Field('username'), 'foo');
-    $this->assertIsValid(new Field('username'), 123);
+    $this->assertFieldIsValid(new Field('username'), 'foo');
+    $this->assertFieldIsValid(new Field('username'), 123);
   }
 
   public function testIsNotValidWhenNullOrEmptyEvenWithOtherValidatorsSet() {
     $field = new Field('favnum');
     $field->addValidator($this->alwaysInvalidValidator());
 
-    $this->assertIsNotValid($field, null);
-    $this->assertIsNotValid($field, '');
-    $this->assertIsNotValid($field, 30);
+    $this->assertFieldIsNotValid($field, null);
+    $this->assertFieldIsNotValid($field, '');
+    $this->assertFieldIsNotValid($field, 30);
   }
 
   public function testWithValidators() {
@@ -96,8 +96,8 @@ class FieldTest extends TestCase {
         $this->alwaysInvalidValidator(),
         $this->alwaysInvalidValidator()
     );
-    $this->assertIsNotValid($field, 'foo', 2);
-    $this->assertIsNotValid($field, null, 2);
+    $this->assertFieldIsNotValid($field, 'foo', 2);
+    $this->assertFieldIsNotValid($field, null, 2);
   }
 
   public function testAddMultipleValidatorsAtOnce() {
@@ -106,7 +106,7 @@ class FieldTest extends TestCase {
         $this->alwaysValidValidator(),
         $this->alwaysInvalidValidator()
     );
-    $this->assertIsNotValid($field, 'foo');
+    $this->assertFieldIsNotValid($field, 'foo');
   }
 
   public function testInvalidOptionNamesFail() {

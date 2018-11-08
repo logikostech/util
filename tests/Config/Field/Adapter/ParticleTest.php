@@ -29,18 +29,18 @@ class ParticleTest extends TestCase {
   public function testApplyValidationRules() {
     $field = Particle::required("first_name");
     $field->chain()->alpha();
-    $this->assertIsValid($field, 'fred');
-    $this->assertIsNotValid($field, 'abc123', 1);
+    $this->assertFieldIsValid($field, 'fred');
+    $this->assertFieldIsNotValid($field, 'abc123', 1);
   }
 
   public function testMultipleValidationRules() {
     $field = Particle::required('first_name');
     $field->chain()->alpha();
     $field->chain()->lengthBetween(3, 20);
-    $this->assertIsValid($field, 'fred');
-    $this->assertIsNotValid($field, 'ab', 1);
-    $this->assertIsNotValid($field, 'abc123', 1);
-    $this->assertIsNotValid($field, 'a0', 2);
+    $this->assertFieldIsValid($field, 'fred');
+    $this->assertFieldIsNotValid($field, 'ab', 1);
+    $this->assertFieldIsNotValid($field, 'abc123', 1);
+    $this->assertFieldIsNotValid($field, 'a0', 2);
   }
 
 
