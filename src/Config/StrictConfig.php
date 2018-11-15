@@ -50,10 +50,6 @@ abstract class StrictConfig extends Config {
     return $this->fieldValidationResult($field)->isValid();
   }
 
-  /**
-   * @param Field $field
-   * @return Validation\Result
-   */
   protected function fieldValidationResult(Field $field): Validation\Result {
     return $field->validate($this->get($field->getName()));
   }
