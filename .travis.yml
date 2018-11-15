@@ -31,8 +31,6 @@ before_script:
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
-  - composer phpstan
-
 
 after_success:
   # Submit coverage report to Coveralls servers, see .coveralls.yml
