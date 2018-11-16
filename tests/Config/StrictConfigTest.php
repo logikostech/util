@@ -44,6 +44,16 @@ class StrictConfigTest extends TestCase {
     );
   }
 
+  public function testWhenFieldIsRequiredNullIsInvalid() {
+    $config = $this->validConfig(['name'=>'fred', 'age'=>30, 'email'=>null]);
+    $this->assertFalse($config->isValid());
+  }
+
+  public function testWhenFieldIsRequiredEmptyStringIsInvalid() {
+    $config = $this->validConfig(['name'=>'fred', 'age'=>30, 'email'=>'']);
+    $this->assertFalse($config->isValid());
+  }
+
   public function testGetValidationMessagesWhenValidationFails() {
     $config = $this->validConfig(['name'=>'a!', 'email'=>'foo@bar.com']);
     $this->assertEquals(
