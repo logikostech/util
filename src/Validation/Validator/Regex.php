@@ -17,7 +17,7 @@ class Regex implements Validator {
     if (!$this->isValidRegexPattern($pattern))
       throw new Exception("Invalid Regex pattern: {$pattern}");
     $this->pattern = $pattern;
-    $this->message = $description;
+    $this->message = $description ?? "Must match pattern: {$pattern}";
   }
 
   public function getPattern() {

@@ -12,6 +12,12 @@ class RegexTest extends TestCase {
     $this->assertSame($p, $v->getPattern());
   }
 
+  public function testHasDefaultDescription() {
+    $p = '/[a-zA-Z]{3}/';
+    $v = new Validator\Regex($p);
+    $this->assertNotEmpty($v->getDescription());
+  }
+
   public function testInvalidPatternThrowsException() {
     $this->assertExceptionWillThrow(
         Validator\Exception::class,

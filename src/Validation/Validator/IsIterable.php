@@ -8,6 +8,8 @@ use Logikos\Util\Validation\Validator;
 class IsIterable implements Validator {
   private $description;
 
+  const DEFAULT_DESCRIPTION = 'Must be iterable';
+
   public function __construct($description = null) {
     if (!is_null($description))
       $this->description = $description;
@@ -20,6 +22,6 @@ class IsIterable implements Validator {
   }
 
   public function getDescription() {
-    return $this->description;
+    return $this->description ?: static::DEFAULT_DESCRIPTION;
   }
 }
