@@ -15,7 +15,7 @@ class IsInstanceOf implements Validator {
    */
   public function __construct($fqcn, $description = null) {
     if (!$this->isValidClassName($fqcn))
-      throw new Exception("Invalid Regex pattern: {$fqcn}");
+      throw new Exception("No such class: {$fqcn}");
 
     $this->fqcn = $fqcn;
     $this->description = $description ?? "Must be an instance of {$fqcn}";
@@ -30,7 +30,7 @@ class IsInstanceOf implements Validator {
   }
 
   protected function isValidClassName($fqcn) {
-    return class_exists($fqcn);
+    return class_exists($fqcn) || interface_exists($fqcn);
   }
 
   public function getDescription() {

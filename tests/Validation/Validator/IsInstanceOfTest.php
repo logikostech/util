@@ -51,4 +51,9 @@ class IsInstanceOfTest extends TestCase {
     $this->assertSame($message, $validator->getDescription());
   }
 
+  public function testCanUseInterfaceInsteadOfClassName() {
+    $v = new Validator\IsInstanceOf(Validator::class);
+    $this->assertNotEmpty($v);
+  }
+
 }
