@@ -15,7 +15,6 @@ abstract class Config extends Registry {
   /**
    * Config constructor.
    * @param array $arrayConfig
-   * @throws CanNotMutateException
    */
   public function __construct(array $arrayConfig = []) {
     parent::__construct();
