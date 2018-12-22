@@ -5,6 +5,11 @@ namespace LogikosTest\Util\Validation\Validator;
 use Logikos\Util\Validation\Validator;
 
 class IsIterableTest extends TestCase {
+  public function testHasDefaultDescription() {
+    $v = new Validator\IsIterable();
+    $this->assertNotEmpty($v->getDescription());
+  }
+
   public function testSetAndGetDescription() {
     $sut = new Validator\IsIterable('some desc');
     $this->assertSame('some desc', $sut->getDescription());

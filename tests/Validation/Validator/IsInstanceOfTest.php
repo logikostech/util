@@ -8,6 +8,11 @@ class IsInstanceOfTest extends TestCase {
   // Fully Qualified Class Name
   const FQCN = \stdClass::class;
 
+  public function testHasDefaultDescription() {
+    $v = new Validator\IsInstanceOf(self::FQCN);
+    $this->assertNotEmpty($v->getDescription());
+  }
+
   public function testInstantiate() {
     $v = new Validator\IsInstanceOf(self::FQCN);
     $this->assertSame(self::FQCN, $v->getFQCN());
@@ -44,6 +49,11 @@ class IsInstanceOfTest extends TestCase {
     $message = "Must be an instance of ". self::FQCN;
     $validator = new Validator\IsInstanceOf(self::FQCN, $message);
     $this->assertSame($message, $validator->getDescription());
+  }
+
+  public function testCanUseInterfaceInsteadOfClassName() {
+    $v = new Validator\IsInstanceOf(Validator::class);
+    $this->assertNotEmpty($v);
   }
 
 }

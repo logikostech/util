@@ -5,6 +5,7 @@ namespace LogikosTest\Util\Validation\Validator;
 use Logikos\Util\Validation\Validator\Callback;
 
 class CallbackTest extends TestCase {
+
   public function testStringFunction() {
     $v = new Callback('is_int', 'some description');
     $this->assertEquals('some description', $v->getDescription());
